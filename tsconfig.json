@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "es6"
+        ],
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "baseUrl": "./",
+        "rootDir": "src/",
+        "outDir": "build/",
+        "typeRoots": [
+            "./src/types/"
+        ],
+        "types": [],
+        "noEmit": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "typeAcquisition": {
+        "include": [
+            "./src/types/index.d.ts"
+        ]
+    },
+    "files": [
+        "src/types/Chatwork/index.d.ts",
+        "src/types/Chatwork/Chatwork-tests.ts"
+    ]
+}
