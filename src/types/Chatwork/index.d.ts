@@ -57,13 +57,21 @@ export interface Me extends ContactedUser {
     login_mail: string;
 }
 
+export interface MyStatus {
+    unread_room_num: number;
+    mention_room_num: number;
+    mytask_room_num: number;
+    unread_num: number;
+    mention_num: number;
+    mytask_num: number;
+}
+
 export interface RequestForContact extends User {
     request_id: number;
     message: string;
 }
 
-export interface Room {
-    room_id: number;
+export interface Room extends RoomId {
     name: string;
     type: string;
     role: string;
@@ -77,6 +85,16 @@ export interface Room {
     icon_path: string;
     last_update_time: number;
     description: string;
+}
+
+export interface RoomId {
+    room_id: number;
+}
+
+export interface RoomMembers {
+    admin: Array<number>;
+    member: Array<number>;
+    readonly: Array<number>;
 }
 
 export interface Message {
