@@ -148,20 +148,51 @@ export interface Link {
 //     export function foo(): void;
 // }
 
-export declare class Client {
+export interface Client {
 
     BASE_URL: string;
     header: { 'X-ChatWorkToken': string };
 
-    private constructor(config: { token: string });
+    // endpoint of /me
+    getMe(): Me;
 
-    public static factory(token: string): Client;
-    public getMe(): Me;
-    public getRooms(): Array<Room>;
-    public sendMessage(roomId: number, message: string): any;
-    public sendMessageToMyChat(message: string): any;
-    public getRoomMembers(roomId: number): Array<RoledUser>;
-    public sendTask(message: string, roomId: number, limit: number, to_ids: Array<number>): any;
-    public getRoomTasks(roomId: number, account_id?: number, assignor_id?: number, status?: 'open' | 'done'): Array<Task>;
-    public getMyTasks(assignor_id?: number, status?: 'open' | 'done'): Array<Task>;
+    // endpoint of /my/...
+    getMyStatus(): MyStatus;
+    getMyTasks(assignor_id?: number, status?: 'open' | 'done'): Array<Task>;
+
+    // endpoint of /contacts
+    getContacts(): ContactedUser;
+
+    // endpoint of /rooms/...
+    getRooms(): Array<Room>;
+    createNewRoom(name: string, adminIds: Array<number>, description?: string, icon_preset?: Array<string>, isCreateLink?: boolean, linkCode?: string, linkNeedAcceptance?: boolean, menberIds?: Array<number>, readonlyIds?: Array<number>): any;
+    getRoomInfomation(roomId: number): Room;
+    updateRoom(roomId: number, description?: string, icon_preset?: Array<String>, name?: string): any;
+    leaveRoom(roomId: number): null;
+    deleteRoom(roomId: number): null;
+    getRoomMembers(roomId: number): Array<RoledUser>;
+    updateRoomMembers(adminIds: Array<number>, memberIds?: Array<number>, readonlyIds?: Array<number>): RoomMembers;
+    getMessages(isDiffernce: boolean): Array<Message>;
+    sendMessage(roomId: number, message: string, isSelfUnread?: boolean): any;
+    sendMessageToMyChat(message: string): any;
+    read(roomId: number, messageId?: number): any;
+    unread(roomId: number, messageId: number): any;
+    getMessageDetail(roomId: number, messageId: number): Message;
+    updateSentMessage(roomId: number, message: string): any;
+    deleteMessage(roomId: number, messageId: number): any;
+    getRoomTasks(roomId: number, account_id?: number, assignor_id?: number, status?: 'open' | 'done'): Array<Task>;
+    addTask(message: string, roomId: number, limit: number, to_ids: Array<number>): any;
+    getTask(roomId: number, taskId: number): Task;
+    updateTask(roomId: number, taskId: number, status: 'open'|'done'): any;
+    getRoomFiles(roomId: number, uploaderId?: number): Array<File>;
+    uploadFile(roomId: number, file: any, message?: string): any;
+    getFileDetail(roomId: number, fileId: number, isCreateLink?: boolean): File;
+    getLinkForInvite(roomId: number): Link;
+    createLinkForInvite(roomId: number, path?: string, description?: string, needAcceptance?: boolean): Link;
+    deleteLinkForInvite(roomId: number): any;
+
+    // endpoint of /incoming_requests/...
+    getRequestsToContact(): Array<RequestForContact>;
+    acceptToContact(requestId: number): RoledUser;
+    denyToContact(requestId: number): null;
 }
