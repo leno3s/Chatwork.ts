@@ -4,7 +4,7 @@
  * ChatWork API wrapper
  *   公式ドキュメント : http://developer.chatwork.com/ja/
  */
-namespace Chatwork {
+export namespace Chatwork {
     export class Client implements Client {
 
         BASE_URL: string = "https://api.chatwork.com/v2";
