@@ -1,195 +1,184 @@
-/// <reference path="types/Chatwork/index.d.ts" />
+import { Chatwork } from "./types/Chatwork/index";
+import { HttpRequest } from "./HttpRequest";
 
 /**
  * ChatWork API wrapper
  *   公式ドキュメント : http://developer.chatwork.com/ja/
  */
-export namespace Chatwork {
-  export class Client implements Client {
-    BASE_URL: string = "https://api.chatwork.com/v2";
-    header: { "X-ChatWorkToken": string };
+export class Client implements Chatwork.Client {
+  httpRequest: HttpRequest;
 
-    private constructor(config: { token: string }) {
-      this.header = { "X-ChatWorkToken": config.token };
-    }
+  constructor(httpRequest: HttpRequest) {
+    this.httpRequest = httpRequest;
+  }
 
-    /**
-     * インスタンス生成用のメソッド
-     *
-     * @param token 利用するアカウントのAPIトークン, 下記URLから取得
-     * https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php
-     *
-     * @returns ChatWorkClientのインスタンス
-     */
-    public static factory(token: string) {
-      return new Client({ token: token });
-    }
+  /**
+   * インスタンス生成用のメソッド
+   *
+   * @param token 利用するアカウントのAPIトークン, 下記URLから取得
+   * https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php
+   *
+   * @returns ChatWork.Clientのインスタンス
+   */
+  public static factory(token: string): Chatwork.Client {
+    return new Client(new HttpRequest(token));
+  }
 
-    private sendRequest(params: { method; path: string; payload: string }) {
-      const url = this.BASE_URL + params.path;
-      const options = {
-        method: params.method,
-        headers: this.header,
-        payload: params.payload || {},
-      };
-      const result = UrlFetchApp.fetch(url, options);
+  /**
+   * 自身の情報を取得
+   * http://developer.chatwork.com/ja/endpoint_me.html#GET-me
+   *
+   * @returns 自分自身の情報
+   */
+  public getMe(): Chatwork.Me {
+    return this.httpRequest.get("/me", null);
+  }
 
-      // return response if 200
-      if (result.getResponseCode() == 200) {
-        return JSON.parse(result.getContentText());
-      }
-      // failed
-      return false;
-    }
+  /**
+   * 自分の未読数、未読To数、未完了タスク数を返す
+   * https://developer.chatwork.com/ja/endpoint_my.html#GET-my-status
+   *
+   * @returns 自分の未読数、未読To数、未完了タスク数
+   */
+  getMyStatus(): Chatwork.MyStatus {
+    return this.httpRequest.get("/my/status", null);
+  }
 
-    private get(endpoint: string, getData) {
-      getData = getData || {};
-      let path = endpoint;
-      let querystringList: Array<string> = [];
+  /**
+   * 自分のタスク一覧を取得
+   * http://developer.chatwork.com/ja/endpoint_my.html#GET-my-task
+   *
+   * @param assignor_id   (オプション) タスク送信者のアカウントID
+   * @param status        (オプション) タスクのステータス
+   * @returns タスクの一覧
+   */
+  public getMyTasks(
+    assignor_id?: number,
+    status?: Chatwork.taskStatus
+  ): Chatwork.Task[] {
+    let param = {};
+    if (assignor_id !== undefined)
+      param["assigned_by_account_id"] = assignor_id;
+    if (status !== undefined) param["status"] = status;
+    return this.httpRequest.get("/my/tasks", param);
+  }
 
-      for (let key in getData) {
-        querystringList.push(
-          encodeURIComponent(key) + "=" + encodeURIComponent(getData[key])
-        );
-      }
-      if (querystringList.length > 0) {
-        path = "?" + querystringList.join("&");
-      }
+  /**
+   * 自分のコンタクト一覧を取得
+   * https://developer.chatwork.com/ja/endpoint_contacts.html#GET-contacts
+   *
+   * @returns 自分のコンタクト一覧
+   */
+  getContacts(): Chatwork.ContactedUser[] {
+    return this.httpRequest.get("/contacts", null);
+  }
 
-      return this.sendRequest({
-        method: "get",
-        path: path,
-        payload: null,
-      });
-    }
+  /**
+   * 自分のチャットルーム一覧を取得
+   * http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
+   * 
+   * @returns 自分のチャット一覧の取得
+   */
+  public getRooms(): Chatwork.Room[] {
+    return this.httpRequest.get("/rooms", null);
+  }
 
-    private post(endpoint: string, postData) {
-      return this.sendRequest({
-        method: "post",
-        path: endpoint,
-        payload: postData,
-      });
-    }
+  /**
+   * グループチャットを新規作成
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms
+   *
+   * @param roomName
+   * @param adminIds 作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
+   * @param description グループチャットの概要説明テキスト
+   * @param iconPreset グループチャットのアイコン種類
+   * @param isCreateLink 招待リンクを作成するか
+   * @param isNeedAcceptance 参加に管理者の承認を必要とするか。
+   * @param linkPath リンクのパス部分。省略するとランダムな文字列となる。
+   * @param memberIds 作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
+   * @param readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
+   * @returns
+   */
+  createNewRoom(
+    roomName: string,
+    adminIds: number[],
+    description?: string,
+    iconPreset?: Chatwork.iconPreset,
+    isCreateLink?: boolean,
+    isNeedAcceptance?: boolean,
+    linkPath?: string,
+    memberIds?: number[],
+    readonlyIds?: number[]
+  ): Chatwork.RoomId {
+    let param = {};
+    param["name"] = roomName;
+    param["members_admin_ids"] = adminIds.join(",");
+    if (description !== undefined) param["description"] = description;
+    if (iconPreset !== undefined) param["icon_preset"] = iconPreset;
+    if (isCreateLink !== undefined) param["link"] = isCreateLink;
+    if (isNeedAcceptance !== undefined)
+      param["link_need_acceptance"] = isNeedAcceptance;
+    if (linkPath !== undefined) param["link_code"] = linkPath;
+    if (memberIds !== undefined)
+      param["members_member_ids"] = memberIds.join(",");
+    if (readonlyIds !== undefined)
+      param["members_readonly_ids"] = readonlyIds.join(",");
+    return this.httpRequest.post("/rooms", param);
+  }
 
-    private put(endpoint: string, putData) {
-      return this.sendRequest({
-        method: "put",
-        path: endpoint,
-        payload: putData,
-      });
-    }
+  /**
+   * 自分に対するコンタクト承認依頼一覧を取得する(※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
+   * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#GET-incoming_requests
+   * 
+   * @returns 自分に対するコンタクト承認依頼一覧
+   */
+  getRequestsToContact(): Chatwork.RequestForContact[] {
+    return this.httpRequest.get("/incoming_requests", null);
+  }
 
-    /**
-     * 自身の情報を取得
-     * http://developer.chatwork.com/ja/endpoint_me.html#GET-me
-     */
-    public getMe() {
-      return this.get("/me", null);
-    }
+  /**
+   * 自分に対するコンタクト承認依頼を承認する
+   * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#PUT-incoming_requests-request_id
+   * 
+   * @param requestId 承認するコンタクト承認依頼のID
+   * @returns 承認した相手のユーザー情報
+   */
+  acceptToContact(requestId: number): Chatwork.ContactedUser {
+    const endpoint = "/incoming_requests/" + requestId;
+    return this.httpRequest.get(endpoint, null);
+  }
 
-    /**
-     * 自分のチャットルーム一覧を取得
-     * http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
-     */
-    public getRooms() {
-      return this.get("/rooms", null);
-    }
+  /**
+   * 自分に対するコンタクト承認依頼をキャンセルする
+   * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#DELETE-incoming_requests-request_id
+   * 
+   * @param requestId キャンセルするコンタクト承認依頼のID
+   */
+  denyToContact(requestId: number): void {
+    const endpoint = "/incoming_requests/" + requestId;
+    this.httpRequest.delete(endpoint, null);
+  }
 
-    /**
-     * 指定したチャットルームへメッセージを送信
-     * http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-messages
-     *
-     * @param roomId    送信する相手のルームID
-     * @param message   送信するメッセージ本文
-     */
-    public sendMessage(roomId: number, message: string) {
-      const endpoint = "/rooms/" + roomId + "/messages";
-      const postData = { body: message };
-      return this.post(endpoint, postData);
-    }
+  /**
+   * 指定したチャットルームへメッセージを送信
+   * http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-messages
+   *
+   * @param roomId 送信先とする相手のRoomId
+   * @param message   送信するメッセージ本文
+   * @returns 送信したメッセージのMessageId
+   */
+  public sendMessage(roomId: number, message: string): Chatwork.MessageId {
+    const endpoint = "/rooms/" + roomId + "/messages";
+    const postData = { body: message };
+    return this.httpRequest.post(endpoint, postData);
+  }
 
-    /**
-     * MyChatへメッセージを送信
-     * ChatWorkClient#sendMessage()のroomIdを/me叩いてroomId渡してるだけ
-     *
-     * @param message 送信するメッセージ本文
-     */
-    public sendMessageToMyChat(message: string) {
-      let myData;
-      myData = this.get("/me", null);
-      return this.sendMessage(myData.room_id, message);
-    }
-
-    /**
-     * チャットルームのメンバー一覧を取得
-     * http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-members
-     *
-     * @param roomId メンバー一覧を取得したいチャットルームのID
-     */
-    public getRoomMembers(roomId: number) {
-      return this.get(`/rooms/${roomId}/members`, null);
-    }
-
-    /**
-     * チャットルームへ新しいタスクを追加
-     * http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-tasks
-     *
-     * @param message   送信するメッセージ本文
-     * @param roomId    メッセージを送信するチャットルームのID
-     * @param limit     タスクの期限, Unix時間で指定(Moment.jsとか使ってね)
-     * @param to_ids    担当者のアカウントID
-     */
-    public sendTask(
-      message: string,
-      roomId: number,
-      limit: number,
-      to_ids: Array<number>
-    ) {
-      const ids: string = to_ids.toString();
-      const postData = {
-        body: message,
-        to_ids: ids,
-        limit: new Number(limit).toFixed(), // 指数表記で来ることがあるので、intにする
-      };
-      return this.post("/rooms/" + roomId + "/tasks", postData);
-    }
-
-    /**
-     * 指定したチャットルームのタスクを全て取得
-     * http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-tasks
-     *
-     * @param roomId        取得したいチャットルームのID
-     * @param account_id    (オプション) タスク担当者のアカウントID
-     * @param assignor_id   (オプション) タスク送信者のアカウントID
-     * @param status        (オプション) タスクのステータス
-     */
-    public getRoomTasks(
-      roomId: number,
-      account_id?: number,
-      assignor_id?: number,
-      status?: "open" | "done"
-    ) {
-      const param = {};
-      if (account_id !== undefined) param["account_id"] = account_id;
-      if (assignor_id !== undefined)
-        param["assigned_by_account_id"] = assignor_id;
-      if (status !== undefined) param["status"] = status;
-      return this.get("/rooms/" + roomId + "/tasks", param);
-    }
-
-    /**
-     * 自分のタスク一覧を取得
-     * http://developer.chatwork.com/ja/endpoint_my.html#GET-my-task
-     *
-     * @param assignor_id   (オプション) タスク送信者のアカウントID
-     * @param status        (オプション) タスクのステータス
-     */
-    public getMyTasks(assignor_id?: number, status?: "open" | "done") {
-      let param = {};
-      if (assignor_id !== undefined)
-        param["assigned_by_account_id"] = assignor_id;
-      if (status !== undefined) param["status"] = status;
-      return this.get("/my/tasks", param);
-    }
+  /**
+   * MyChatへメッセージを送信
+   *
+   * @param message 送信するメッセージ本文
+   */
+  public sendMessageToMyChat(message: string): Chatwork.MessageId {
+    let me = this.httpRequest.get("/me", null);
+    return this.sendMessage(me.room_id, message);
   }
 }
