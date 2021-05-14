@@ -1,4 +1,5 @@
 import { Chatwork } from "./types/Chatwork/index";
+import { Room } from "./Room";
 import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
 
 /**
@@ -79,11 +80,15 @@ export class Client implements Chatwork.Client {
   /**
    * 自分のチャットルーム一覧を取得
    * http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
-   * 
+   *
    * @returns 自分のチャット一覧の取得
    */
   public getRooms(): Chatwork.Room[] {
-    return this.httpRequest.get("/rooms", null);
+    const rooms = [];
+    this.httpRequest.get("/rooms", null).array.forEach((room) => {
+      rooms.push(new Room(room));
+    });
+    return rooms;
   }
 
   /**
@@ -183,5 +188,16 @@ export class Client implements Chatwork.Client {
   public sendMessageToMyChat(message: string): Chatwork.MessageId {
     let me = this.httpRequest.get("/me", null);
     return this.sendMessage(me.room_id, message);
+  }
+
+  /**
+   * チャットの名前、アイコン、種類(my/direct/group)を取得
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id
+   *
+   * @returns チャットの名前、アイコン、種類(my/direct/group)
+   */
+  getRoom(roomId: number): Chatwork.Room {
+    const endpoint = "/rooms/" + roomId;
+    return new Room(this.httpRequest.get(endpoint, null));
   }
 }

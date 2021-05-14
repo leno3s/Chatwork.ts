@@ -1,4 +1,4 @@
-import { HttpRequest } from "./HttpRequest";
+import { IHttpRequest } from "./IHttpRequest";
 import { Chatwork } from "./types/Chatwork/index";
 
 export class Room implements Chatwork.Room {
@@ -16,9 +16,9 @@ export class Room implements Chatwork.Room {
   last_update_time: number;
   description: string;
   room_id: number;
-  httpRequest: HttpRequest;
+  httpRequest: IHttpRequest;
 
-  constructor(httpRequest: HttpRequest) {
+  constructor(httpRequest: IHttpRequest) {
     this.httpRequest = httpRequest;
   }
 
@@ -30,7 +30,7 @@ export class Room implements Chatwork.Room {
    */
   getRoomInfomation(): Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id;
-    return this.httpRequest.get(endpoint, null);
+    return new Room(this.httpRequest.get(endpoint, null));
   }
 
   /**
