@@ -1,14 +1,14 @@
 import { Chatwork } from "./types/Chatwork/index";
-import { HttpRequest } from "./HttpRequest";
+import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
 
 /**
  * ChatWork API wrapper
  *   公式ドキュメント : http://developer.chatwork.com/ja/
  */
 export class Client implements Chatwork.Client {
-  httpRequest: HttpRequest;
+  httpRequest: IHttpRequest;
 
-  constructor(httpRequest: HttpRequest) {
+  constructor(httpRequest: IHttpRequest) {
     this.httpRequest = httpRequest;
   }
 
@@ -20,8 +20,11 @@ export class Client implements Chatwork.Client {
    *
    * @returns ChatWork.Clientのインスタンス
    */
-  public static factory(token: string): Chatwork.Client {
-    return new Client(new HttpRequest(token));
+  public static factory(
+    token: string,
+    httpRequest: { new (): IHttpRequest }
+  ): Chatwork.Client {
+    return new Client(createHttpRequest(token, httpRequest));
   }
 
   /**
@@ -96,7 +99,7 @@ export class Client implements Chatwork.Client {
    * @param linkPath リンクのパス部分。省略するとランダムな文字列となる。
    * @param memberIds 作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @param readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
-   * @returns
+   * @returns 作成したチャットルームのルームID
    */
   createNewRoom(
     roomName: string,
@@ -128,7 +131,7 @@ export class Client implements Chatwork.Client {
   /**
    * 自分に対するコンタクト承認依頼一覧を取得する(※100件まで取得可能。今後、より多くのデータを取得する為のページネーションの仕組みを提供予定)
    * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#GET-incoming_requests
-   * 
+   *
    * @returns 自分に対するコンタクト承認依頼一覧
    */
   getRequestsToContact(): Chatwork.RequestForContact[] {
@@ -138,7 +141,7 @@ export class Client implements Chatwork.Client {
   /**
    * 自分に対するコンタクト承認依頼を承認する
    * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#PUT-incoming_requests-request_id
-   * 
+   *
    * @param requestId 承認するコンタクト承認依頼のID
    * @returns 承認した相手のユーザー情報
    */
@@ -150,7 +153,7 @@ export class Client implements Chatwork.Client {
   /**
    * 自分に対するコンタクト承認依頼をキャンセルする
    * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#DELETE-incoming_requests-request_id
-   * 
+   *
    * @param requestId キャンセルするコンタクト承認依頼のID
    */
   denyToContact(requestId: number): void {

@@ -2,5 +2,8 @@
   "devDependencies": {
     "@types/google-apps-script": "^1.0.32",
     "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "sync-request": "^6.1.0"
   }
 }
