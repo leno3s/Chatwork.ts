@@ -11,7 +11,12 @@ export class HttpRequestGAS implements IHttpRequest {
     this.header = { "X-ChatWorkToken": token };
   }
 
-  private sendRequest(method: GoogleAppsScript.URL_Fetch.HttpMethod, path: string, payload: Object, contentType?: string) {
+  private sendRequest(
+    method: GoogleAppsScript.URL_Fetch.HttpMethod,
+    path: string,
+    payload: Object,
+    contentType?: string
+  ) {
     const url = this.BASE_URL + path;
     const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
       method: method,

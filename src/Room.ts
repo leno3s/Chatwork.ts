@@ -309,7 +309,7 @@ export class Room implements Chatwork.Room {
   /**
    * 招待リンクを取得する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-link
-   * 
+   *
    * @returns リンクの情報
    */
   getLinkForInvite(): Chatwork.Link {
@@ -320,7 +320,7 @@ export class Room implements Chatwork.Room {
   /**
    * 招待リンクを作成する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-link
-   * 
+   *
    * @param path リンク文字列
    * リンクのパス部分。省略するとランダムな文字列となる。
    * @param description リンク説明文
@@ -346,7 +346,7 @@ export class Room implements Chatwork.Room {
   /**
    * 招待リンクの情報を変更する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-link
-   * 
+   *
    * @param path リンク文字列
    * リンクのパス部分。省略するとランダムな文字列となる。
    * @param description リンク説明文
@@ -369,12 +369,11 @@ export class Room implements Chatwork.Room {
     return this.httpRequest.put(endpoint, payload);
   }
 
-
   /**
    * 招待リンクを削除する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id-link
-   * 
-   * @returns 
+   *
+   * @returns
    */
   deleteLinkForInvite(): { public: boolean } {
     const endpoint = "/rooms/" + this.room_id + "/link";

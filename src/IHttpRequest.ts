@@ -15,6 +15,6 @@ export interface HttpRequestConstructor {
   new (token: string): IHttpRequest;
 }
 
-export function createHttpRequest(token: string, ctor: HttpRequestConstructor){
-    return new ctor(token);
+export function createHttpRequest(token: string, ctor: HttpRequestConstructor) {
+  return new ctor(token);
 }
