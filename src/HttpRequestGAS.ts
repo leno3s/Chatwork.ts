@@ -1,4 +1,5 @@
-import { HttpRequestConstructor, IHttpRequest } from "./IHttpRequest";
+/// <reference types="google-apps-script" />
+import { IHttpRequest } from "./IHttpRequest";
 
 /**
  * http requestの処理のクラス

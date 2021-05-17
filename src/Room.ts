@@ -18,7 +18,21 @@ export class Room implements Chatwork.Room {
   room_id: number;
   httpRequest: IHttpRequest;
 
-  constructor(httpRequest: IHttpRequest) {
+  constructor(roomInfo: any, httpRequest: IHttpRequest) {
+    this.name = roomInfo.name;
+    this.type = roomInfo.type;
+    this.role = roomInfo.role;
+    this.sticky = roomInfo.sticky;
+    this.unread_num = roomInfo.unread_num;
+    this.mention_num = roomInfo.mention_num;
+    this.mytask_num = roomInfo.mytask_num;
+    this.message_num = roomInfo.message_num;
+    this.file_num = roomInfo.file_num;
+    this.task_num = roomInfo.task_num;
+    this.icon_path = roomInfo.icon_path;
+    this.last_update_time = roomInfo.last_update_time;
+    this.description = roomInfo.description;
+    this.room_id = roomInfo.room_id;
     this.httpRequest = httpRequest;
   }
 
@@ -30,7 +44,7 @@ export class Room implements Chatwork.Room {
    */
   getRoomInfomation(): Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id;
-    return new Room(this.httpRequest.get(endpoint, null));
+    return new Room(this.httpRequest.get(endpoint, null), this.httpRequest);
   }
 
   /**

@@ -213,6 +213,6 @@ export class Client implements Chatwork.Client {
    */
   getRoom(roomId: number): Chatwork.Room {
     const endpoint = "/rooms/" + roomId;
-    return new Room(this.httpRequest.get(endpoint, null));
+    return new Room(this.httpRequest.get(endpoint, null), this.httpRequest);
   }
 }
