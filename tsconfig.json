@@ -13,7 +13,7 @@
         "typeRoots": [
             "./node_modules/@types"
         ],
-        "types": [],
+        "types": ["jest"],
         "target": "esnext",
         "lib": [
             "esnext"
