@@ -146,7 +146,7 @@ export namespace Chatwork {
 
   export interface Room extends RoomId, ReadInfomation {
     name: string;
-    type: string;
+    type: chatType;
     role: string;
     sticky: boolean;
     mytask_num: number;
@@ -208,6 +208,7 @@ export namespace Chatwork {
     deleteLinkForInvite(): { public: boolean };
   }
 
+  export type chatType = "my" | "direct" | "group";
   export type taskStatus = "open" | "done";
   export type limitType = "none" | "date" | "time";
   export type iconPreset =

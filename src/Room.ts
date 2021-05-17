@@ -3,7 +3,7 @@ import { Chatwork } from "./types/Chatwork/index";
 
 export class Room implements Chatwork.Room {
   name: string;
-  type: string;
+  type: Chatwork.chatType;
   role: string;
   sticky: boolean;
   unread_num: number;
