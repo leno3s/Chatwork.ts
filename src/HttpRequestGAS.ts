@@ -26,12 +26,13 @@ export class HttpRequestGAS implements IHttpRequest {
     };
     const result = UrlFetchApp.fetch(url, options);
 
-    // return response if 200
-    if (result.getResponseCode() == 200) {
-      return JSON.parse(result.getContentText());
+    if (result.getResponseCode() === 204) {
+      return [];
     }
-    // failed
-    throw new Error(result.getContentText());
+    if (result.getResponseCode() !== 200) {
+      throw new Error(result.getContentText());
+    }
+    return JSON.parse(result.getContentText());
   }
 
   public get(endpoint: string, payload: any) {

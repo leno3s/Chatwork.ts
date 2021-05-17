@@ -14,8 +14,14 @@ export class HttpRequestNode implements IHttpRequest {
     const opt = options || {};
     //@ts-expect-error
     opt.headers = this.header;
-    const response = request.default(method, url, opt).getBody("utf-8");
-    return JSON.parse(response);
+    const response = request.default(method, url, opt);
+    if(response.statusCode === 204){
+      return [];
+    }
+    if (response.statusCode !== 200) {
+      throw new Error(response.getBody("utf-8"));
+    }
+    return JSON.parse(response.getBody('utf-8'));
   }
 
   public get(path: string, payload: any) {
