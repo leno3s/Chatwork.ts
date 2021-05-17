@@ -5,10 +5,10 @@ export interface IHttpRequest {
   BASE_URL: string;
   header: { "X-ChatWorkToken": string };
 
-  get(endpoint: string, payload);
-  post(endpoint: string, payload);
-  put(endpoint: string, payload);
-  delete(endpoint: string, payload);
+  get(endpoint: string, payload: any): any;
+  post(endpoint: string, payload: any): any;
+  put(endpoint: string, payload: any): any;
+  delete(endpoint: string, payload: any): any;
 }
 
 export interface HttpRequestConstructor {

@@ -60,7 +60,10 @@ export class Client implements Chatwork.Client {
     assignor_id?: number,
     status?: Chatwork.taskStatus
   ): Chatwork.Task[] {
-    let param = {};
+    const param: {
+      assigned_by_account_id?: number;
+      status?: Chatwork.taskStatus;
+    } = {};
     if (assignor_id !== undefined)
       param["assigned_by_account_id"] = assignor_id;
     if (status !== undefined) param["status"] = status;
@@ -84,9 +87,11 @@ export class Client implements Chatwork.Client {
    * @returns 自分のチャット一覧の取得
    */
   public getRooms(): Chatwork.Room[] {
-    const rooms = [];
-    this.httpRequest.get("/rooms", null).array.forEach((room) => {
-      rooms.push(new Room(room));
+    const rooms: Chatwork.Room[] = [];
+    const response = this.httpRequest.get("/rooms", null);
+    // @ts-expect-error
+    response.forEach((room) => {
+      rooms.push(new Room(room, this.httpRequest));
     });
     return rooms;
   }
@@ -117,19 +122,29 @@ export class Client implements Chatwork.Client {
     memberIds?: number[],
     readonlyIds?: number[]
   ): Chatwork.RoomId {
-    let param = {};
-    param["name"] = roomName;
-    param["members_admin_ids"] = adminIds.join(",");
-    if (description !== undefined) param["description"] = description;
-    if (iconPreset !== undefined) param["icon_preset"] = iconPreset;
-    if (isCreateLink !== undefined) param["link"] = isCreateLink;
+    let param: {
+      name: string;
+      members_admin_ids: string;
+      description?: string;
+      icon_preset?: Chatwork.iconPreset;
+      link?: boolean;
+      link_need_acceptance?: boolean;
+      link_code?: string;
+      members_member_ids?: string;
+      members_readonly_ids?: string;
+    } = {
+      name: roomName,
+      members_admin_ids: adminIds.join(","),
+    };
+    if (description !== undefined) param.description = description;
+    if (iconPreset !== undefined) param.icon_preset = iconPreset;
+    if (isCreateLink !== undefined) param.link = isCreateLink;
     if (isNeedAcceptance !== undefined)
-      param["link_need_acceptance"] = isNeedAcceptance;
-    if (linkPath !== undefined) param["link_code"] = linkPath;
-    if (memberIds !== undefined)
-      param["members_member_ids"] = memberIds.join(",");
+      param.link_need_acceptance = isNeedAcceptance;
+    if (linkPath !== undefined) param.link_code = linkPath;
+    if (memberIds !== undefined) param.members_member_ids = memberIds.join(",");
     if (readonlyIds !== undefined)
-      param["members_readonly_ids"] = readonlyIds.join(",");
+      param.members_readonly_ids = readonlyIds.join(",");
     return this.httpRequest.post("/rooms", param);
   }
 

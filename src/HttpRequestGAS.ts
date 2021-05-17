@@ -33,7 +33,7 @@ export class HttpRequestGAS implements IHttpRequest {
     throw new Error(result.getContentText());
   }
 
-  public get(endpoint: string, payload) {
+  public get(endpoint: string, payload: any) {
     payload = payload || {};
     let path = endpoint;
     let querystringList: Array<string> = [];
@@ -47,18 +47,18 @@ export class HttpRequestGAS implements IHttpRequest {
       path = "?" + querystringList.join("&");
     }
 
-    return this.sendRequest("get", path, null);
+    return this.sendRequest("get", path, {});
   }
 
-  public post(endpoint: string, payload) {
+  public post(endpoint: string, payload: any) {
     return this.sendRequest("post", endpoint, payload);
   }
 
-  public put(endpoint: string, payload) {
+  public put(endpoint: string, payload: any) {
     return this.sendRequest("put", endpoint, payload);
   }
 
-  public delete(endpoint: string, payload) {
+  public delete(endpoint: string, payload: any) {
     return this.sendRequest("delete", endpoint, payload);
   }
 }

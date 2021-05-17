@@ -51,15 +51,19 @@ export class Room implements Chatwork.Room {
     if (!(roomName || description || icon_preset)) {
       throw Error("At least one argument is required.");
     }
-    const payload = {};
+    let payload: {
+      name?: string;
+      description?: string;
+      icon_preset?: Chatwork.iconPreset;
+    } = {};
     if (roomName !== undefined) {
-      payload["name"] = roomName;
+      payload.name = roomName;
     }
     if (description !== undefined) {
-      payload["description"] = description;
+      payload.description = description;
     }
     if (icon_preset !== undefined) {
-      payload["icon_preset"] = icon_preset;
+      payload.icon_preset = icon_preset;
     }
     return this.httpRequest.put(endpoint, payload);
   }
@@ -110,11 +114,15 @@ export class Room implements Chatwork.Room {
     readonlyIds?: number[]
   ): Chatwork.RoomMemberPermissions {
     const endpoint = "/rooms/" + this.room_id + "/members";
-    const payload = { members_admin_ids: adminIds.join(",") };
+    const payload: {
+      members_admin_ids: string;
+      members_member_ids?: string;
+      members_readonly_ids?: string;
+    } = { members_admin_ids: adminIds.join(",") };
     if (memberIds !== undefined)
-      payload["members_member_ids"] = memberIds.join(",");
+      payload.members_member_ids = memberIds.join(",");
     if (readonlyIds !== undefined)
-      payload["members_readonly_ids"] = readonlyIds.join(",");
+      payload.members_readonly_ids = readonlyIds.join(",");
     return this.httpRequest.put(endpoint, payload);
   }
 
@@ -128,8 +136,8 @@ export class Room implements Chatwork.Room {
    */
   getMessages(force: 0 | 1): Chatwork.Message[] {
     const endpoint = "/rooms/" + this.room_id + "/messages";
-    const payload = {};
-    if (force !== undefined) payload["force"] = force;
+    const payload: { force?: 0 | 1 } = {};
+    if (force !== undefined) payload.force = force;
     return this.httpRequest.put(endpoint, payload);
   }
 
@@ -147,8 +155,8 @@ export class Room implements Chatwork.Room {
     isSelfUnread?: 0 | 1
   ): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.room_id + "/messages";
-    const payload = { body: message };
-    if (isSelfUnread !== undefined) payload["self_unread"] = isSelfUnread;
+    const payload: { body: string; self_unread?: 0 | 1 } = { body: message };
+    if (isSelfUnread !== undefined) payload.self_unread = isSelfUnread;
     return this.httpRequest.post(endpoint, payload);
   }
 
@@ -161,8 +169,8 @@ export class Room implements Chatwork.Room {
    */
   read(messageId?: number): Chatwork.ReadInfomation {
     const endpoint = "/rooms/" + this.room_id + "/messages/read";
-    const payload = {};
-    if (messageId !== undefined) payload["message_id"] = messageId;
+    const payload: { message_id?: number } = {};
+    if (messageId !== undefined) payload.message_id = messageId;
     return this.httpRequest.put(endpoint, payload);
   }
 
@@ -228,14 +236,17 @@ export class Room implements Chatwork.Room {
   public getTasks(
     account_id?: number,
     assignor_id?: number,
-    status?: "open" | "done"
+    status?: Chatwork.taskStatus
   ): Chatwork.Task[] {
     const endpoint = "/rooms/" + this.room_id + "/tasks";
-    const payload = {};
-    if (account_id !== undefined) payload["account_id"] = account_id;
-    if (assignor_id !== undefined)
-      payload["assigned_by_account_id"] = assignor_id;
-    if (status !== undefined) payload["status"] = status;
+    const payload: {
+      account_id?: number;
+      assigned_by_account_id?: number;
+      status?: Chatwork.taskStatus;
+    } = {};
+    if (account_id !== undefined) payload.account_id = account_id;
+    if (assignor_id !== undefined) payload.assigned_by_account_id = assignor_id;
+    if (status !== undefined) payload.status = status;
     return this.httpRequest.get(endpoint, payload);
   }
 
@@ -252,18 +263,23 @@ export class Room implements Chatwork.Room {
    */
   public addTask(
     message: string,
-    to_ids: Array<number>,
+    to_ids: number[],
     limit?: number,
     limitType?: Chatwork.limitType
   ): Chatwork.TaskIds {
     const endpoint = "/rooms/" + this.room_id + "/tasks";
     const ids: string = to_ids.toString();
-    const payload = {
+    const payload: {
+      body: string;
+      to_ids: string;
+      limit?: string;
+      limit_type?: Chatwork.limitType;
+    } = {
       body: message,
       to_ids: ids,
     };
-    if (limit !== undefined) payload["limit"] = new Number(limit).toFixed(); // 指数表記で来ることがあるので、intにする
-    if (limitType !== undefined) payload["limit_type"] = limitType;
+    if (limit !== undefined) payload.limit = new Number(limit).toFixed(); // 指数表記で来ることがあるので、intにする
+    if (limitType !== undefined) payload.limit_type = limitType;
     return this.httpRequest.post(endpoint, payload);
   }
 
@@ -335,11 +351,14 @@ export class Room implements Chatwork.Room {
     needAcceptance?: boolean
   ): Chatwork.Link {
     const endpoint = "/rooms/" + this.room_id + "/link";
-    const payload = {};
-    if (path !== undefined) payload["code"] = path;
-    if (description !== undefined) payload["description"] = description;
-    if (needAcceptance !== undefined)
-      payload["need_acceptance"] = needAcceptance;
+    const payload: {
+      code?: string;
+      description?: string;
+      need_acceptance?: boolean;
+    } = {};
+    if (path !== undefined) payload.code = path;
+    if (description !== undefined) payload.description = description;
+    if (needAcceptance !== undefined) payload.need_acceptance = needAcceptance;
     return this.httpRequest.post(endpoint, payload);
   }
 
@@ -361,11 +380,14 @@ export class Room implements Chatwork.Room {
     needAcceptance?: boolean
   ): Chatwork.Link {
     const endpoint = "/rooms/" + this.room_id + "/link";
-    const payload = {};
-    if (path !== undefined) payload["code"] = path;
-    if (description !== undefined) payload["description"] = description;
-    if (needAcceptance !== undefined)
-      payload["need_acceptance"] = needAcceptance;
+    const payload: {
+      code?: string;
+      description?: string;
+      need_acceptance?: boolean;
+    } = {};
+    if (path !== undefined) payload.code = path;
+    if (description !== undefined) payload.description = description;
+    if (needAcceptance !== undefined) payload.need_acceptance = needAcceptance;
     return this.httpRequest.put(endpoint, payload);
   }
 
