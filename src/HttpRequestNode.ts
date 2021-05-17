@@ -12,6 +12,8 @@ export class HttpRequestNode implements IHttpRequest {
   private fetch(method: request.HttpVerb, path: string, options?: Object) {
     const url = this.BASE_URL + path;
     const opt = options || {};
+    //@ts-expect-error
+    opt.headers = this.header;
     const response = request.default(method, url, opt).getBody("utf-8");
     return JSON.parse(response);
   }
