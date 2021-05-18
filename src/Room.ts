@@ -210,7 +210,7 @@ export class Room implements Chatwork.Room {
    */
   getMessageDetail(messageId: number): Chatwork.Message {
     const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
-    return this.httpRequest.put(endpoint, null);
+    return this.httpRequest.get(endpoint, null);
   }
 
   /**
