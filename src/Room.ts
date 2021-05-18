@@ -1,5 +1,7 @@
 import { IHttpRequest } from "./IHttpRequest";
-import { Chatwork } from "./types/Chatwork/index";
+import { Message } from "./Message";
+import { Task } from "./Task";
+import { Chatwork } from "./types/Chatwork";
 
 export class Room implements Chatwork.Room {
   name: string;
@@ -42,7 +44,7 @@ export class Room implements Chatwork.Room {
    *
    * @returns チャットの名前、アイコン、種類(my/direct/group)
    */
-  getRoomInfomation(): Chatwork.Room {
+  getRoom(): Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id;
     return new Room(this.httpRequest.get(endpoint, null), this.httpRequest);
   }
@@ -56,7 +58,7 @@ export class Room implements Chatwork.Room {
    * @param icon_preset グループチャットのアイコン種類
    * @returns アップデートしたチャットルームのID
    */
-  updateRoom(
+  update(
     roomName?: string,
     description?: string,
     icon_preset?: Chatwork.iconPreset
@@ -86,7 +88,7 @@ export class Room implements Chatwork.Room {
    * グループチャットを退席する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
    */
-  leaveRoom(): void {
+  leave(): void {
     const endpoint = "/rooms/" + this.room_id;
     const payload = { action_type: "leave" };
     return this.httpRequest.delete(endpoint, payload);
@@ -96,7 +98,7 @@ export class Room implements Chatwork.Room {
    * グループチャットを削除する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
    */
-  deleteRoom(): void {
+  delete(): void {
     const endpoint = "/rooms/" + this.room_id;
     const payload = { action_type: "delete" };
     return this.httpRequest.delete(endpoint, payload);
@@ -108,7 +110,7 @@ export class Room implements Chatwork.Room {
    *
    * @param roomId メンバー一覧を取得したいチャットルームのID
    */
-  public getRoomMembers(): Chatwork.RoledUser[] {
+  public getMembers(): Chatwork.RoledUser[] {
     const endpoint = "/rooms/" + this.room_id + "/members";
     return this.httpRequest.get(endpoint, null);
   }
@@ -122,7 +124,7 @@ export class Room implements Chatwork.Room {
    * @param readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @returns チャットルームのメンバーの権限のリスト
    */
-  updateRoomMembers(
+  updateMembers(
     adminIds: number[],
     memberIds?: number[],
     readonlyIds?: number[]
@@ -152,7 +154,13 @@ export class Room implements Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id + "/messages";
     const payload: { force?: 0 | 1 } = {};
     if (force !== undefined) payload.force = force;
-    return this.httpRequest.get(endpoint, payload);
+    const response = this.httpRequest.get(endpoint, payload);
+    const messages: Chatwork.Message[] = [];
+    //@ts-expect-error
+    response.forEach((message) => {
+      messages.push(new Message(message, this.room_id, this.httpRequest));
+    });
+    return messages;
   }
 
   /**
@@ -208,9 +216,10 @@ export class Room implements Chatwork.Room {
    * @param messageId 取得するメッセージのID
    * @returns メッセージの情報
    */
-  getMessageDetail(messageId: number): Chatwork.Message {
+  getMessage(messageId: number): Chatwork.Message {
     const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
-    return this.httpRequest.get(endpoint, null);
+    const response = this.httpRequest.get(endpoint, null);
+    return new Message(response, this.room_id, this.httpRequest);
   }
 
   /**
@@ -261,7 +270,13 @@ export class Room implements Chatwork.Room {
     if (account_id !== undefined) payload.account_id = account_id;
     if (assignor_id !== undefined) payload.assigned_by_account_id = assignor_id;
     if (status !== undefined) payload.status = status;
-    return this.httpRequest.get(endpoint, payload);
+    const response = this.httpRequest.get(endpoint, payload);
+    const tasks: Task[] = [];
+    //@ts-expect-error
+    response.forEach((task) => {
+      tasks.push(new Task(task, this.room_id, this.httpRequest));
+    });
+    return tasks;
   }
 
   /**
@@ -304,9 +319,10 @@ export class Room implements Chatwork.Room {
    * @param taskId 取得するタスクのID
    * @returns タスクの情報
    */
-  getTaskDetail(taskId: number): Chatwork.Task {
+  getTask(taskId: number): Chatwork.Task {
     const endpoint = "/rooms/" + this.room_id + "/tasks/" + taskId;
-    return this.httpRequest.get(endpoint, null);
+    const response = this.httpRequest.get(endpoint, null);
+    return new Task(response, this.room_id, this.httpRequest);
   }
 
   /**
