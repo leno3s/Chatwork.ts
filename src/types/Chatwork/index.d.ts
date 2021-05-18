@@ -1,231 +1,232 @@
-// Type definitions for Chatwork x.x
-// Project: https://github.com/baz/foo (Does not have to be to GitHub, but prefer linking to a source code repository rather than to a project website.)
-// Definitions by: My Self <https://github.com/me>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// Type definitions for Chatwork
+// Project: https://github.com/leno3s/Chatwork.ts (Does not have to be to GitHub, but prefer linking to a source code repository rather than to a project website.)
+// Definitions by: leno3s <https://github.com/leno3s>
 
-/*~ If this module is a UMD module that exposes a global variable 'myLib' when
- *~ loaded outside a module loader environment, declare that global here.
- *~ Otherwise, delete this declaration.
- */
-// export as namespace myLib;
-export as namespace Chatwork;
+export namespace Chatwork {
+  export interface Account {
+    account_id: number;
+    name: string;
+    avatar_image_url: string;
+  }
 
-/*~ If this module has methods, declare them as functions like so.
- */
-// export function myMethod(a: string): string;
-// export function myOtherMethod(a: number): number;
+  export interface User extends Account {
+    chatwork_id: string;
+    organization_id: number;
+    organization_name: string;
+    department: string;
+  }
 
-/*~ You can declare types that are available via importing the module */
-// export interface someType {
-//     name: string;
-//     length: number;
-//     extras?: string[];
-// }
+  export interface RoledUser extends User {
+    role: string;
+  }
 
-export interface Account {
-  account_id: number;
-  name: string;
-  avatar_image_url: string;
-}
+  export interface ContactedUser extends User {
+    room_id: number;
+  }
 
-export interface User extends Account {
-  chatwork_id: string;
-  organization_id: number;
-  organization_name: string;
-  department: string;
-}
+  export interface Me extends ContactedUser {
+    title: string;
+    url: string;
+    introduction: string;
+    mail: string;
+    tel_organization: string;
+    tel_extension: string;
+    tel_mobile: string;
+    skype: string;
+    facebook: string;
+    twitter: string;
+    login_mail: string;
+  }
 
-export interface RoledUser extends User {
-  role: string;
-}
+  export interface MyStatus extends ReadInfomation {
+    unread_room_num: number;
+    mention_room_num: number;
+    mytask_room_num: number;
+    mytask_num: number;
+  }
 
-export interface ContactedUser extends User {
-  room_id: number;
-}
+  export interface RequestForContact extends User {
+    request_id: number;
+    message: string;
+  }
 
-export interface Me extends ContactedUser {
-  title: string;
-  url: string;
-  introduction: string;
-  mail: string;
-  tel_organization: string;
-  tel_extension: string;
-  tel_mobile: string;
-  skype: string;
-  facebook: string;
-  twitter: string;
-  login_mail: string;
-}
+  export interface RoomId {
+    room_id: number;
+  }
 
-export interface MyStatus {
-  unread_room_num: number;
-  mention_room_num: number;
-  mytask_room_num: number;
-  unread_num: number;
-  mention_num: number;
-  mytask_num: number;
-}
+  export interface RoomMemberPermissions {
+    admin: Array<number>;
+    member: Array<number>;
+    readonly: Array<number>;
+  }
 
-export interface RequestForContact extends User {
-  request_id: number;
-  message: string;
-}
+  export interface Message extends MessageId {
+    account: Account;
+    body: string;
+    send_time: number;
+    update_time: number;
+  }
 
-export interface Room extends RoomId {
-  name: string;
-  type: string;
-  role: string;
-  sticky: boolean;
-  unread_num: number;
-  mention_num: number;
-  mytask_num: number;
-  message_num: number;
-  file_num: number;
-  task_num: number;
-  icon_path: string;
-  last_update_time: number;
-  description: string;
-}
+  export interface MessageId {
+    message_id: string;
+  }
 
-export interface RoomId {
-  room_id: number;
-}
+  export interface ReadInfomation {
+    unread_num: number;
+    mention_num: number;
+  }
 
-export interface RoomMembers {
-  admin: Array<number>;
-  member: Array<number>;
-  readonly: Array<number>;
-}
+  export interface Task extends TaskId {
+    account: Account;
+    assigned_by_account: Account;
+    message_id: number;
+    body: string;
+    limit_time: number;
+    status: string;
+  }
 
-export interface Message {
-  message_id: number;
-  account: Account;
-  body: string;
-  send_time: number;
-  update_time: number;
-}
+  export interface TaskId {
+    task_id: number;
+  }
 
-export interface Task {
-  task_id: number;
-  account: Account;
-  assigned_by_account: Account;
-  message_id: number;
-  body: string;
-  limit_time: number;
-  status: string;
-}
+  export interface TaskIds {
+    task_ids: Array<number>;
+  }
 
-export interface File {
-  file_id: number;
-  account: Account;
-  message_id: number;
-  filename: string;
-  filesize: number;
-  upload_time: number;
-}
+  export interface File extends FileId {
+    file_id: number;
+    account: Account;
+    message_id: number;
+    filename: string;
+    filesize: number;
+    upload_time: number;
+  }
 
-export interface Link {
-  public: boolean;
-  url: string;
-  need_acceptance: boolean;
-  description: string;
-}
+  export interface FileId {
+    file_id: number;
+  }
 
-/*~ You can declare properties of the module using const, let, or var */
-// export const myField: number;
+  export interface Link {
+    public: boolean;
+    url: string;
+    need_acceptance: boolean;
+    description: string;
+  }
 
-/*~ If there are types, properties, or methods inside dotted names
- *~ of the module, declare them inside a 'namespace'.
- */
-// export namespace subProp {
-//     /*~ For example, given this definition, someone could write:
-//      *~   import { subProp } from 'yourModule';
-//      *~   subProp.foo();
-//      *~ or
-//      *~   import * as yourMod from 'yourModule';
-//      *~   yourMod.subProp.foo();
-//      */
-//     export function foo(): void;
-// }
+  export interface Client {
+    // endpoint of /me
+    getMe(): Me;
 
-export interface Client {
-  BASE_URL: string;
-  header: { "X-ChatWorkToken": string };
+    // endpoint of /my/...
+    getMyStatus(): MyStatus;
+    getMyTasks(assignor_id?: number, status?: taskStatus): Array<Task>;
 
-  // endpoint of /me
-  getMe(): Me;
+    // endpoint of /contacts
+    getContacts(): Array<ContactedUser>;
 
-  // endpoint of /my/...
-  getMyStatus(): MyStatus;
-  getMyTasks(assignor_id?: number, status?: "open" | "done"): Array<Task>;
+    // endpoint of /rooms/...
+    getRooms(): Array<Room>;
+    createNewRoom(
+      roomName: string,
+      adminIds: Array<number>,
+      description?: string,
+      icon_preset?: iconPreset,
+      isCreateLink?: boolean,
+      isNeedAcceptance?: boolean,
+      linkPath?: string,
+      memberIds?: Array<number>,
+      readonlyIds?: Array<number>
+    ): RoomId;
 
-  // endpoint of /contacts
-  getContacts(): ContactedUser;
+    // endpoint of /incoming_requests/...
+    getRequestsToContact(): Array<RequestForContact>;
+    acceptToContact(requestId: number): ContactedUser;
+    denyToContact(requestId: number): void;
+  }
 
-  // endpoint of /rooms/...
-  getRooms(): Array<Room>;
-  createNewRoom(
-    name: string,
-    adminIds: Array<number>,
-    description?: string,
-    icon_preset?: Array<string>,
-    isCreateLink?: boolean,
-    linkCode?: string,
-    linkNeedAcceptance?: boolean,
-    menberIds?: Array<number>,
-    readonlyIds?: Array<number>
-  ): any;
-  getRoomInfomation(roomId: number): Room;
-  updateRoom(
-    roomId: number,
-    description?: string,
-    icon_preset?: Array<String>,
-    name?: string
-  ): any;
-  leaveRoom(roomId: number): null;
-  deleteRoom(roomId: number): null;
-  getRoomMembers(roomId: number): Array<RoledUser>;
-  updateRoomMembers(
-    adminIds: Array<number>,
-    memberIds?: Array<number>,
-    readonlyIds?: Array<number>
-  ): RoomMembers;
-  getMessages(isDiffernce: boolean): Array<Message>;
-  sendMessage(roomId: number, message: string, isSelfUnread?: boolean): any;
-  sendMessageToMyChat(message: string): any;
-  read(roomId: number, messageId?: number): any;
-  unread(roomId: number, messageId: number): any;
-  getMessageDetail(roomId: number, messageId: number): Message;
-  updateSentMessage(roomId: number, message: string): any;
-  deleteMessage(roomId: number, messageId: number): any;
-  getRoomTasks(
-    roomId: number,
-    account_id?: number,
-    assignor_id?: number,
-    status?: "open" | "done"
-  ): Array<Task>;
-  addTask(
-    message: string,
-    roomId: number,
-    limit: number,
-    to_ids: Array<number>
-  ): any;
-  getTask(roomId: number, taskId: number): Task;
-  updateTask(roomId: number, taskId: number, status: "open" | "done"): any;
-  getRoomFiles(roomId: number, uploaderId?: number): Array<File>;
-  uploadFile(roomId: number, file: any, message?: string): any;
-  getFileDetail(roomId: number, fileId: number, isCreateLink?: boolean): File;
-  getLinkForInvite(roomId: number): Link;
-  createLinkForInvite(
-    roomId: number,
-    path?: string,
-    description?: string,
-    needAcceptance?: boolean
-  ): Link;
-  deleteLinkForInvite(roomId: number): any;
+  export interface Room extends RoomId, ReadInfomation {
+    name: string;
+    type: chatType;
+    role: string;
+    sticky: boolean;
+    mytask_num: number;
+    message_num: number;
+    file_num: number;
+    task_num: number;
+    icon_path: string;
+    last_update_time: number;
+    description: string;
 
-  // endpoint of /incoming_requests/...
-  getRequestsToContact(): Array<RequestForContact>;
-  acceptToContact(requestId: number): RoledUser;
-  denyToContact(requestId: number): null;
+    getRoomInfomation(): Room;
+    updateRoom(
+      roomName?: string,
+      description?: string,
+      icon_preset?: iconPreset
+    ): RoomId;
+    leaveRoom(): void;
+    deleteRoom(): void;
+    getRoomMembers(): Array<RoledUser>;
+    updateRoomMembers(
+      adminIds: Array<number>,
+      memberIds?: Array<number>,
+      readonlyIds?: Array<number>
+    ): RoomMemberPermissions;
+    getMessages(force: 0 | 1): Array<Message>;
+    sendMessage(message: string, isSelfUnread?: 0 | 1): MessageId;
+    read(messageId?: number): ReadInfomation;
+    unread(messageId: number): ReadInfomation;
+    getMessageDetail(messageId: number): Message;
+    updateSentMessage(messageId: string, body: string): MessageId;
+    deleteMessage(messageId: number): MessageId;
+    getTasks(
+      account_id?: number,
+      assignor_id?: number,
+      status?: taskStatus
+    ): Array<Task>;
+    addTask(
+      message: string,
+      to_ids: Array<number>,
+      limit?: number,
+      limitType?: limitType
+    ): TaskIds;
+    getTaskDetail(taskId: number): Task;
+    updateTask(taskId: number, status: taskStatus): TaskId;
+    getRoomFiles(uploaderId?: number): Array<File>;
+    uploadFile(file: any, message?: string): FileId;
+    getFileDetail(fileId: number, isCreateLink?: boolean): File;
+    getLinkForInvite(): Link;
+    createLinkForInvite(
+      path?: string,
+      description?: string,
+      needAcceptance?: boolean
+    ): Link;
+    updateLinkForInvite(
+      path?: string,
+      description?: string,
+      needAcceptance?: boolean
+    ): Link;
+    deleteLinkForInvite(): { public: boolean };
+  }
+
+  export type chatType = "my" | "direct" | "group";
+  export type taskStatus = "open" | "done";
+  export type limitType = "none" | "date" | "time";
+  export type iconPreset =
+    | "group"
+    | "check"
+    | "document"
+    | "meeting"
+    | "event"
+    | "project"
+    | "business"
+    | "study"
+    | "security"
+    | "star"
+    | "idea"
+    | "heart"
+    | "magcup"
+    | "beer"
+    | "music"
+    | "sports"
+    | "travel";
 }
