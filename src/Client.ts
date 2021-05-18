@@ -1,4 +1,4 @@
-import { Chatwork } from "./types/Chatwork/index";
+import { Chatwork } from "./types/Chatwork";
 import { Room } from "./Room";
 import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
 

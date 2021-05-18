@@ -65,6 +65,8 @@ export namespace Chatwork {
     body: string;
     send_time: number;
     update_time: number;
+    update(body: string): MessageId;
+    delete(): MessageId;
   }
 
   export interface MessageId {
@@ -83,6 +85,7 @@ export namespace Chatwork {
     body: string;
     limit_time: number;
     status: string;
+    update(status: taskStatus): TaskId;
   }
 
   export interface TaskId {
@@ -157,16 +160,16 @@ export namespace Chatwork {
     last_update_time: number;
     description: string;
 
-    getRoomInfomation(): Room;
-    updateRoom(
+    getRoom(): Room;
+    update(
       roomName?: string,
       description?: string,
       icon_preset?: iconPreset
     ): RoomId;
-    leaveRoom(): void;
-    deleteRoom(): void;
-    getRoomMembers(): Array<RoledUser>;
-    updateRoomMembers(
+    leave(): void;
+    delete(): void;
+    getMembers(): Array<RoledUser>;
+    updateMembers(
       adminIds: Array<number>,
       memberIds?: Array<number>,
       readonlyIds?: Array<number>
@@ -175,21 +178,21 @@ export namespace Chatwork {
     sendMessage(message: string, isSelfUnread?: 0 | 1): MessageId;
     read(messageId?: number): ReadInfomation;
     unread(messageId: number): ReadInfomation;
-    getMessageDetail(messageId: number): Message;
+    getMessage(messageId: number): Message;
     updateSentMessage(messageId: string, body: string): MessageId;
     deleteMessage(messageId: number): MessageId;
     getTasks(
-      account_id?: number,
-      assignor_id?: number,
+      accountId?: number,
+      assignorId?: number,
       status?: taskStatus
     ): Array<Task>;
     addTask(
       message: string,
-      to_ids: Array<number>,
+      toIds: Array<number>,
       limit?: number,
       limitType?: limitType
     ): TaskIds;
-    getTaskDetail(taskId: number): Task;
+    getTask(taskId: number): Task;
     updateTask(taskId: number, status: taskStatus): TaskId;
     getRoomFiles(uploaderId?: number): Array<File>;
     uploadFile(file: any, message?: string): FileId;

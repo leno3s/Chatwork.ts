@@ -1,4 +1,5 @@
 import { Client, HttpRequestNode, Chatwork, Room } from "../src/index";
+import { Message } from "../src/Message";
 
 const token = "chatwork_token";
 const client = new Client(new HttpRequestNode(token));
@@ -26,7 +27,7 @@ test("Room Properties", () => {
 });
 
 test("Room#getRoomInfomation()", () => {
-  const info = room.getRoomInfomation();
+  const info = room.getRoom();
   expect(info).toBeInstanceOf(Room);
   expect(typeof info.room_id).toBe("number");
   expect(typeof info.name).toBe("string");
@@ -46,7 +47,7 @@ test("Room#getRoomInfomation()", () => {
 });
 
 test("Room#getRoomMembers()", () => {
-  const members = room.getRoomMembers();
+  const members = room.getMembers();
   const member = members[0];
   expect(Array.isArray(members)).toBe(true);
   expect(typeof member.account_id).toBe("number");
@@ -64,6 +65,7 @@ test("Room#getMessages()", () => {
   const message = messages[0];
   messageId = message.message_id;
   expect(Array.isArray(messages)).toBe(true);
+  expect(message).toBeInstanceOf(Message);
   expect(typeof message.account).toBe("object");
   expect(typeof message.body).toBe("string");
   expect(typeof message.message_id).toBe("string");
