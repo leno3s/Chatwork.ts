@@ -66,7 +66,7 @@ test("Room#getMessages()", () => {
   expect(Array.isArray(messages)).toBe(true);
   expect(typeof message.account).toBe("object");
   expect(typeof message.body).toBe("string");
-  expect(typeof message.message_id).toBe("number");
+  expect(typeof message.message_id).toBe("string");
   expect(typeof message.send_time).toBe("number");
   expect(typeof message.update_time).toBe("number");
 });

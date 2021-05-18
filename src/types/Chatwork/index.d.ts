@@ -68,7 +68,7 @@ export namespace Chatwork {
   }
 
   export interface MessageId {
-    message_id: number;
+    message_id: string;
   }
 
   export interface ReadInfomation {
