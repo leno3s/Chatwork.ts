@@ -18,6 +18,7 @@ export class Client implements Chatwork.Client {
    *
    * @param token 利用するアカウントのAPIトークン, 下記URLから取得
    * https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php
+   * @param httpRequest Httpリクエストに利用するクラスを指定
    *
    * @returns ChatWork.Clientのインスタンス
    */
