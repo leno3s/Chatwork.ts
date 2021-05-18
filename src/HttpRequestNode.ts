@@ -25,7 +25,20 @@ export class HttpRequestNode implements IHttpRequest {
   }
 
   public get(path: string, payload: any) {
-    return this.fetch("GET", path, payload);
+    payload = payload || {};
+    let pathWithQuery = path;
+    let querystringList: Array<string> = [];
+
+    for (let key in payload) {
+      querystringList.push(
+        encodeURIComponent(key) + "=" + encodeURIComponent(payload[key])
+      );
+    }
+    if (querystringList.length > 0) {
+      pathWithQuery += "?" + querystringList.join("&");
+    }
+
+    return this.fetch("GET", pathWithQuery);
   }
 
   public post(path: string, payload: any) {

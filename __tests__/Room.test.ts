@@ -64,11 +64,11 @@ test("Room#getMessages()", () => {
   const message = messages[0];
   messageId = message.message_id;
   expect(Array.isArray(messages)).toBe(true);
-  expect(message.account).toBe("object");
-  expect(message.body).toBe("string");
-  expect(message.message_id).toBe("number");
-  expect(message.send_time).toBe("number");
-  expect(message.update_time).toBe("number");
+  expect(typeof message.account).toBe("object");
+  expect(typeof message.body).toBe("string");
+  expect(typeof message.message_id).toBe("number");
+  expect(typeof message.send_time).toBe("number");
+  expect(typeof message.update_time).toBe("number");
 });
 
 test("Room#getTasks()", () => {

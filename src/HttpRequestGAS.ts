@@ -46,7 +46,7 @@ export class HttpRequestGAS implements IHttpRequest {
       );
     }
     if (querystringList.length > 0) {
-      path = "?" + querystringList.join("&");
+      path += "?" + querystringList.join("&");
     }
 
     return this.sendRequest("get", path, {});
