@@ -152,7 +152,7 @@ export class Room implements Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id + "/messages";
     const payload: { force?: 0 | 1 } = {};
     if (force !== undefined) payload.force = force;
-    return this.httpRequest.put(endpoint, payload);
+    return this.httpRequest.get(endpoint, payload);
   }
 
   /**
