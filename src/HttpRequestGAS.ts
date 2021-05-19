@@ -3,6 +3,10 @@ import { IHttpRequest } from "./IHttpRequest";
 
 /**
  * http requestの処理のクラス
+ * Google Apps ScriptのFetchAppを使う実装
+ *
+ * @class HttpRequestGAS
+ * @implements {IHttpRequest}
  */
 export class HttpRequestGAS implements IHttpRequest {
   BASE_URL: string = "https://api.chatwork.com/v2";

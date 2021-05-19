@@ -1,6 +1,12 @@
 import { IHttpRequest } from "./IHttpRequest";
 import { Chatwork } from "./types/Chatwork";
 
+/**
+ * タスクを表すクラス
+ *
+ * @class Task
+ * @implements {Chatwork.Task}
+ */
 export class Task implements Chatwork.Task {
   account: Chatwork.Account;
   assigned_by_account: Chatwork.Account;
