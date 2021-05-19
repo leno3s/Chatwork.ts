@@ -9,7 +9,7 @@ import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
 export class Client implements Chatwork.Client {
   httpRequest: IHttpRequest;
 
-  constructor(httpRequest: IHttpRequest) {
+  public constructor(httpRequest: IHttpRequest) {
     this.httpRequest = httpRequest;
   }
 
@@ -45,7 +45,7 @@ export class Client implements Chatwork.Client {
    *
    * @returns 自分の未読数、未読To数、未完了タスク数
    */
-  getMyStatus(): Chatwork.MyStatus {
+  public getMyStatus(): Chatwork.MyStatus {
     return this.httpRequest.get("/my/status", null);
   }
 
@@ -77,7 +77,7 @@ export class Client implements Chatwork.Client {
    *
    * @returns 自分のコンタクト一覧
    */
-  getContacts(): Chatwork.ContactedUser[] {
+  public getContacts(): Chatwork.ContactedUser[] {
     return this.httpRequest.get("/contacts", null);
   }
 
@@ -112,7 +112,7 @@ export class Client implements Chatwork.Client {
    * @param readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @returns 作成したチャットルームのルームID
    */
-  createNewRoom(
+  public createNewRoom(
     roomName: string,
     adminIds: number[],
     description?: string,
@@ -155,7 +155,7 @@ export class Client implements Chatwork.Client {
    *
    * @returns 自分に対するコンタクト承認依頼一覧
    */
-  getRequestsToContact(): Chatwork.RequestForContact[] {
+  public getRequestsToContact(): Chatwork.RequestForContact[] {
     return this.httpRequest.get("/incoming_requests", null);
   }
 
@@ -166,7 +166,7 @@ export class Client implements Chatwork.Client {
    * @param requestId 承認するコンタクト承認依頼のID
    * @returns 承認した相手のユーザー情報
    */
-  acceptToContact(requestId: number): Chatwork.ContactedUser {
+  public acceptToContact(requestId: number): Chatwork.ContactedUser {
     const endpoint = "/incoming_requests/" + requestId;
     return this.httpRequest.get(endpoint, null);
   }
@@ -177,7 +177,7 @@ export class Client implements Chatwork.Client {
    *
    * @param requestId キャンセルするコンタクト承認依頼のID
    */
-  denyToContact(requestId: number): void {
+  public denyToContact(requestId: number): void {
     const endpoint = "/incoming_requests/" + requestId;
     this.httpRequest.delete(endpoint, null);
   }
@@ -212,7 +212,7 @@ export class Client implements Chatwork.Client {
    *
    * @returns チャットの名前、アイコン、種類(my/direct/group)
    */
-  getRoom(roomId: number): Chatwork.Room {
+  public getRoom(roomId: number): Chatwork.Room {
     const endpoint = "/rooms/" + roomId;
     return new Room(this.httpRequest.get(endpoint, null), this.httpRequest);
   }

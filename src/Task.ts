@@ -32,7 +32,7 @@ export class Task implements Chatwork.Task {
    * 'done'を指定した場合、未完了のタスクを完了にします。 'open'を指定した場合、完了のタスクを未完了にします。
    * @returns タスクのID
    */
-  update(status: Chatwork.taskStatus): Chatwork.TaskId {
+  public update(status: Chatwork.taskStatus): Chatwork.TaskId {
     const endpoint =
       "/rooms/" + this.roomId + "/tasks/" + this.task_id + "/status";
     const payload = { body: status };

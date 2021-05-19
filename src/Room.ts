@@ -44,7 +44,7 @@ export class Room implements Chatwork.Room {
    *
    * @returns チャットの名前、アイコン、種類(my/direct/group)
    */
-  getRoom(): Chatwork.Room {
+  public getRoom(): Chatwork.Room {
     const endpoint = "/rooms/" + this.room_id;
     return new Room(this.httpRequest.get(endpoint, null), this.httpRequest);
   }
@@ -58,7 +58,7 @@ export class Room implements Chatwork.Room {
    * @param icon_preset グループチャットのアイコン種類
    * @returns アップデートしたチャットルームのID
    */
-  update(
+  public update(
     roomName?: string,
     description?: string,
     icon_preset?: Chatwork.iconPreset
@@ -88,7 +88,7 @@ export class Room implements Chatwork.Room {
    * グループチャットを退席する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
    */
-  leave(): void {
+  public leave(): void {
     const endpoint = "/rooms/" + this.room_id;
     const payload = { action_type: "leave" };
     return this.httpRequest.delete(endpoint, payload);
@@ -98,7 +98,7 @@ export class Room implements Chatwork.Room {
    * グループチャットを削除する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
    */
-  delete(): void {
+  public delete(): void {
     const endpoint = "/rooms/" + this.room_id;
     const payload = { action_type: "delete" };
     return this.httpRequest.delete(endpoint, payload);
@@ -124,7 +124,7 @@ export class Room implements Chatwork.Room {
    * @param readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @returns チャットルームのメンバーの権限のリスト
    */
-  updateMembers(
+  public updateMembers(
     adminIds: number[],
     memberIds?: number[],
     readonlyIds?: number[]
@@ -150,7 +150,7 @@ export class Room implements Chatwork.Room {
    * 1を指定すると未取得にかかわらず最新の100件を取得します（デフォルトは0）
    * @returns チャットルームのメッセージ
    */
-  getMessages(force: 0 | 1): Chatwork.Message[] {
+  public getMessages(force: 0 | 1): Chatwork.Message[] {
     const endpoint = "/rooms/" + this.room_id + "/messages";
     const payload: { force?: 0 | 1 } = {};
     if (force !== undefined) payload.force = force;
@@ -189,7 +189,7 @@ export class Room implements Chatwork.Room {
    * @param messageId ここで指定するIDのメッセージまでを既読にする。すでに既読済みの場合はエラー(400)
    * @returns 未読メッセージの情報
    */
-  read(messageId?: number): Chatwork.ReadInfomation {
+  public read(messageId?: number): Chatwork.ReadInfomation {
     const endpoint = "/rooms/" + this.room_id + "/messages/read";
     const payload: { message_id?: number } = {};
     if (messageId !== undefined) payload.message_id = messageId;
@@ -203,7 +203,7 @@ export class Room implements Chatwork.Room {
    * @param messageId ここで指定するIDのメッセージ以降を未読にする
    * @returns 未読メッセージの情報
    */
-  unread(messageId: number): Chatwork.ReadInfomation {
+  public unread(messageId: number): Chatwork.ReadInfomation {
     const endpoint = "/rooms/" + this.room_id + "/messages/unread";
     const payload = { message_id: messageId };
     return this.httpRequest.put(endpoint, payload);
@@ -216,7 +216,7 @@ export class Room implements Chatwork.Room {
    * @param messageId 取得するメッセージのID
    * @returns メッセージの情報
    */
-  getMessage(messageId: number): Chatwork.Message {
+  public getMessage(messageId: number): Chatwork.Message {
     const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
     const response = this.httpRequest.get(endpoint, null);
     return new Message(response, this.room_id, this.httpRequest);
@@ -230,7 +230,10 @@ export class Room implements Chatwork.Room {
    * @param body 更新するメッセージ本文
    * @returns 削除したメッセージのID
    */
-  updateSentMessage(messageId: string, body: string): Chatwork.MessageId {
+  public updateSentMessage(
+    messageId: string,
+    body: string
+  ): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
     const payload = { body: body };
     return this.httpRequest.put(endpoint, payload);
@@ -243,7 +246,7 @@ export class Room implements Chatwork.Room {
    * @param messageId 削除するメッセージのID
    * @returns 削除したメッセージのID
    */
-  deleteMessage(messageId: number): Chatwork.MessageId {
+  public deleteMessage(messageId: number): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
     return this.httpRequest.delete(endpoint, null);
   }
@@ -319,7 +322,7 @@ export class Room implements Chatwork.Room {
    * @param taskId 取得するタスクのID
    * @returns タスクの情報
    */
-  getTask(taskId: number): Chatwork.Task {
+  public getTask(taskId: number): Chatwork.Task {
     const endpoint = "/rooms/" + this.room_id + "/tasks/" + taskId;
     const response = this.httpRequest.get(endpoint, null);
     return new Task(response, this.room_id, this.httpRequest);
@@ -334,21 +337,24 @@ export class Room implements Chatwork.Room {
    * 'done'を指定した場合、未完了のタスクを完了にします。 'open'を指定した場合、完了のタスクを未完了にします。
    * @returns タスクのID
    */
-  updateTask(taskId: number, status: Chatwork.taskStatus): Chatwork.TaskId {
+  public updateTask(
+    taskId: number,
+    status: Chatwork.taskStatus
+  ): Chatwork.TaskId {
     const endpoint = "/rooms/" + this.room_id + "/tasks/" + taskId + "/status";
     const payload = { body: status };
     return this.httpRequest.put(endpoint, payload);
   }
 
-  getRoomFiles(uploaderId?: number): Chatwork.File[] {
+  public getRoomFiles(uploaderId?: number): Chatwork.File[] {
     throw new Error("Method not implemented.");
   }
 
-  uploadFile(file: any, message?: string): Chatwork.FileId {
+  public uploadFile(file: any, message?: string): Chatwork.FileId {
     throw new Error("Method not implemented.");
   }
 
-  getFileDetail(fileId: number, isCreateLink?: boolean): Chatwork.File {
+  public getFileDetail(fileId: number, isCreateLink?: boolean): Chatwork.File {
     throw new Error("Method not implemented.");
   }
 
@@ -358,7 +364,7 @@ export class Room implements Chatwork.Room {
    *
    * @returns リンクの情報
    */
-  getLinkForInvite(): Chatwork.Link {
+  public getLinkForInvite(): Chatwork.Link {
     const endpoint = "/rooms/" + this.room_id + "/link";
     return this.httpRequest.put(endpoint, null);
   }
@@ -375,7 +381,7 @@ export class Room implements Chatwork.Room {
    * 参加に管理者の承認を必要とするか。
    * @returns リンクの情報
    */
-  createLinkForInvite(
+  public createLinkForInvite(
     path?: string,
     description?: string,
     needAcceptance?: boolean
@@ -404,7 +410,7 @@ export class Room implements Chatwork.Room {
    * 参加に管理者の承認を必要とするか。
    * @returns リンクの情報
    */
-  updateLinkForInvite(
+  public updateLinkForInvite(
     path?: string,
     description?: string,
     needAcceptance?: boolean
@@ -427,7 +433,7 @@ export class Room implements Chatwork.Room {
    *
    * @returns
    */
-  deleteLinkForInvite(): { public: boolean } {
+  public deleteLinkForInvite(): { public: boolean } {
     const endpoint = "/rooms/" + this.room_id + "/link";
     return this.httpRequest.put(endpoint, null);
   }

@@ -27,7 +27,7 @@ export class Message implements Chatwork.Message {
    * @param body 更新するメッセージ本文
    * @returns 削除したメッセージのID
    */
-  update(body: string): Chatwork.MessageId {
+  public update(body: string): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     const payload = { body: body };
     return this.httpRequest.put(endpoint, payload);
@@ -39,7 +39,7 @@ export class Message implements Chatwork.Message {
    *
    * @returns 削除したメッセージのID
    */
-  delete(): Chatwork.MessageId {
+  public delete(): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     return this.httpRequest.delete(endpoint, null);
   }
