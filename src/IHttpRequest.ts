@@ -1,5 +1,7 @@
 /**
- * http requestの処理のクラス
+ * http requestのインターフェース
+ *
+ * @interface IHttpRequest
  */
 export interface IHttpRequest {
   BASE_URL: string;
@@ -11,10 +13,25 @@ export interface IHttpRequest {
   delete(endpoint: string, payload: any): any;
 }
 
+/**
+ * HttpRequestのコンストラクタを表すインターフェース
+ *
+ * @interface HttpRequestConstructor
+ */
 export interface HttpRequestConstructor {
   new (token: string): IHttpRequest;
 }
 
-export function createHttpRequest(token: string, ctor: HttpRequestConstructor) {
+/**
+ * HttpRequestのインスタンスを生成する関数
+ *
+ * @param {string} token ChatworkのAPIトークン
+ * @param {HttpRequestConstructor} ctor IHttpRequestを実装したクラス
+ * @returns {IHttpRequest} HttpRequestのインスタンス
+ */
+export function createHttpRequest(
+  token: string,
+  ctor: HttpRequestConstructor
+): IHttpRequest {
   return new ctor(token);
 }

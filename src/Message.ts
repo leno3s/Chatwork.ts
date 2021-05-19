@@ -1,12 +1,23 @@
 import { IHttpRequest } from "./IHttpRequest";
 import { Chatwork } from "./types/Chatwork";
 
+/**
+ * メッセージオブジェクトのクラス
+ *
+ * @class Message
+ * @implements {Chatwork.Message}
+ */
 export class Message implements Chatwork.Message {
   account: Chatwork.Account;
   body: string;
   send_time: number;
   update_time: number;
   message_id: string;
+  /**
+   * エンドポイントが/rooms/以下の為にroom_idを要求されている
+   * @type {number}
+   * @memberof Message
+   */
   roomId: number;
   httpRequest: IHttpRequest;
 
@@ -24,10 +35,10 @@ export class Message implements Chatwork.Message {
    * チャットのメッセージを更新する。
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-message_id
    *
-   * @param body 更新するメッセージ本文
-   * @returns 削除したメッセージのID
+   * @param {string} body 更新するメッセージ本文
+   * @returns {Chatwork.MessageId} 削除したメッセージのID
    */
-  update(body: string): Chatwork.MessageId {
+  public update(body: string): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     const payload = { body: body };
     return this.httpRequest.put(endpoint, payload);
@@ -37,9 +48,9 @@ export class Message implements Chatwork.Message {
    * メッセージを削除する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id-messages-message_id
    *
-   * @returns 削除したメッセージのID
+   * @returns {Chatwork.MessageId} 削除したメッセージのID
    */
-  delete(): Chatwork.MessageId {
+  public delete(): Chatwork.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     return this.httpRequest.delete(endpoint, null);
   }

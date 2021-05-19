@@ -1,6 +1,13 @@
 import { IHttpRequest } from "./IHttpRequest";
 import request = require("sync-request");
 
+/**
+ * http requestの処理のクラス
+ * node上でsync-requestを使って動かす実装
+ *
+ * @class HttpRequestNode
+ * @implements {IHttpRequest}
+ */
 export class HttpRequestNode implements IHttpRequest {
   BASE_URL: string = "https://api.chatwork.com/v2";
   header: { "X-ChatWorkToken": string };
