@@ -324,12 +324,12 @@ export class Room implements Chatwork.Room {
    */
   public addTask(
     message: string,
-    to_ids: number[],
+    toIds: number[],
     limit?: number,
     limitType?: Chatwork.limitType
   ): Chatwork.TaskIds {
     const endpoint = "/rooms/" + this.room_id + "/tasks";
-    const ids: string = to_ids.toString();
+    const ids: string = toIds.join(",");
     const payload: {
       body: string;
       to_ids: string;
