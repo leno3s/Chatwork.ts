@@ -208,10 +208,10 @@ export class Room implements Chatwork.Room {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-read
    *
    * @param {number} messageId ここで指定するIDのメッセージまでを既読にする。すでに既読済みの場合はエラー(400)
-   * @returns {Chatwork.ReadInfomation} 未読メッセージの情報
+   * @returns {Chatwork.ReadInformation} 未読メッセージの情報
    * @memberof Room
    */
-  public read(messageId?: number): Chatwork.ReadInfomation {
+  public read(messageId?: number): Chatwork.ReadInformation {
     const endpoint = "/rooms/" + this.room_id + "/messages/read";
     const payload: { message_id?: number } = {};
     if (messageId !== undefined) payload.message_id = messageId;
@@ -223,10 +223,10 @@ export class Room implements Chatwork.Room {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-unread
    *
    * @param {number} messageId ここで指定するIDのメッセージ以降を未読にする
-   * @returns {Chatwork.ReadInfomation} 未読メッセージの情報
+   * @returns {Chatwork.ReadInformation} 未読メッセージの情報
    * @memberof Room
    */
-  public unread(messageId: number): Chatwork.ReadInfomation {
+  public unread(messageId: number): Chatwork.ReadInformation {
     const endpoint = "/rooms/" + this.room_id + "/messages/unread";
     const payload = { message_id: messageId };
     return this.httpRequest.put(endpoint, payload);

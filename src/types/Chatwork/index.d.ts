@@ -38,7 +38,7 @@ export namespace Chatwork {
     login_mail: string;
   }
 
-  export interface MyStatus extends ReadInfomation {
+  export interface MyStatus extends ReadInformation {
     unread_room_num: number;
     mention_room_num: number;
     mytask_room_num: number;
@@ -73,7 +73,7 @@ export namespace Chatwork {
     message_id: string;
   }
 
-  export interface ReadInfomation {
+  export interface ReadInformation {
     unread_num: number;
     mention_num: number;
   }
@@ -147,7 +147,7 @@ export namespace Chatwork {
     denyToContact(requestId: number): void;
   }
 
-  export interface Room extends RoomId, ReadInfomation {
+  export interface Room extends RoomId, ReadInformation {
     name: string;
     type: chatType;
     role: string;
@@ -176,8 +176,8 @@ export namespace Chatwork {
     ): RoomMemberPermissions;
     getMessages(force: 0 | 1): Array<Message>;
     sendMessage(message: string, isSelfUnread?: 0 | 1): MessageId;
-    read(messageId?: number): ReadInfomation;
-    unread(messageId: number): ReadInfomation;
+    read(messageId?: number): ReadInformation;
+    unread(messageId: number): ReadInformation;
     getMessage(messageId: number): Message;
     updateSentMessage(messageId: string, body: string): MessageId;
     deleteMessage(messageId: number): MessageId;
