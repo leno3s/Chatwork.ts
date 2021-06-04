@@ -69,4 +69,22 @@ describe("Messageのテスト", () => {
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
+
+  test("Message#read()", () => {
+    const request = new HttpRequestMock();
+    const message = new Message(messageData, messageData.roomId, request);
+    const spy = jest.spyOn(request, "put");
+    const messageId = message.read();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/read");
+    expect(spy.mock.calls[0][1]).toBe(null);
+  });
+
+  test("Message#delete()", () => {
+    const request = new HttpRequestMock();
+    const message = new Message(messageData, messageData.roomId, request);
+    const spy = jest.spyOn(request, "delete");
+    const messageId = message.delete();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
+    expect(spy.mock.calls[0][1]).toBe(null);
+  });
 });

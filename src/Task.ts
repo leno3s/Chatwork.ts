@@ -1,16 +1,16 @@
+import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
-import { Chatwork } from "./types/Chatwork";
 
 /**
  * タスクを表すクラス
  *
  * @class Task
- * @implements {Chatwork.Task}
+ * @implements {Types.Task}
  */
-export class Task implements Chatwork.Task {
-  account: Chatwork.Account;
-  assigned_by_account: Chatwork.Account;
-  message_id: number;
+export class Task implements Types.Task {
+  account: Types.Account;
+  assigned_by_account: Types.Account;
+  message_id: string;
   body: string;
   limit_time: number;
   status: string;
@@ -18,6 +18,13 @@ export class Task implements Chatwork.Task {
   roomId: number;
   httpRequest: IHttpRequest;
 
+  /**
+   * Creates an instance of Task.
+   * @param {*} task
+   * @param {number} roomId
+   * @param {IHttpRequest} httpRequest
+   * @memberof Task
+   */
   constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
     this.account = task.account;
     this.assigned_by_account = task.assigned_by_account;
@@ -34,11 +41,11 @@ export class Task implements Chatwork.Task {
    * タスク完了状態を変更する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-tasks-task_id-status
    *
-   * @param status タスク完了状態
+   * @param {Types.taskStatus} status タスク完了状態
    * 'done'を指定した場合、未完了のタスクを完了にします。 'open'を指定した場合、完了のタスクを未完了にします。
-   * @returns タスクのID
+   * @returns {Types.TaskId} タスクのID
    */
-  public update(status: Chatwork.taskStatus): Chatwork.TaskId {
+  public update(status: Types.taskStatus): Types.TaskId {
     const endpoint =
       "/rooms/" + this.roomId + "/tasks/" + this.task_id + "/status";
     const payload = { body: status };

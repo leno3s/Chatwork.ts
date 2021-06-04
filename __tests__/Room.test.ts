@@ -110,7 +110,10 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "get");
-    const messages = room.getMessages(1);
+    let messages
+    expect(() => {
+      messages = room.getMessages(1);
+    }).toThrow();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages");
     expect(spy.mock.calls[0][1]).toStrictEqual({ force: 1 });
   });
@@ -127,24 +130,15 @@ describe("Clientのテスト", () => {
     });
   });
 
-  test("Room#updateSentMessage()", () => {
+  test("Room#read()", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "put");
-    const messageId = room.updateSentMessage("123456789", "message updated.");
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
+    const messageId = room.read("123456789");
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/read");
     expect(spy.mock.calls[0][1]).toStrictEqual({
-      body: "message updated.",
+      message_id: "123456789"
     });
-  });
-
-  test("Room#deleteMessage()", () => {
-    const request = new HttpRequestMock();
-    const room = new Room(roomData, request);
-    const spy = jest.spyOn(request, "delete");
-    const messageId = room.deleteMessage("123456789");
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
-    expect(spy.mock.calls[0][1]).toStrictEqual(null);
   });
 
   test("Room#getTasks()", () => {
@@ -163,20 +157,20 @@ describe("Clientのテスト", () => {
     });
   });
 
-  test("Room#getLinkForInvite()", () => {
+  test("Room#getLink()", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "get");
-    const link = room.getLinkForInvite();
+    const link = room.getLink();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
 
-  test("Room#createLinkForInvite()", () => {
+  test("Room#createLink()", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "post");
-    const link = room.createLinkForInvite(
+    const link = room.createLink(
         "link_string",
         "the link's description.",
         true
@@ -187,31 +181,5 @@ describe("Clientのテスト", () => {
         description: "the link's description.",
         need_acceptance: true
     });
-  });
-
-  test("Room#updateLinkForInvite()", () => {
-    const request = new HttpRequestMock();
-    const room = new Room(roomData, request);
-    const spy = jest.spyOn(request, "put");
-    const link = room.updateLinkForInvite(
-        "link_string",
-        "the link's description.",
-        true
-    );
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
-    expect(spy.mock.calls[0][1]).toStrictEqual({
-        code: "link_string",
-        description: "the link's description.",
-        need_acceptance: true
-    });
-  });
-
-  test("Room#deleteLinkForInvite()", () => {
-    const request = new HttpRequestMock();
-    const room = new Room(roomData, request);
-    const spy = jest.spyOn(request, "put");
-    const link = room.deleteLinkForInvite();
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
-    expect(spy.mock.calls[0][1]).toBe(null);
   });
 });

@@ -77,6 +77,15 @@ describe("Clientのテスト", () => {
     expect(spy.mock.calls[0][1]).toBe(null);
   });
 
+  test("Client#getRoom()", () => {
+    const request = new HttpRequestMock();
+    const client = new Client(request);
+    const spy = jest.spyOn(request, "get");
+    const response = client.getRoom(123);
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123");
+    expect(spy.mock.calls[0][1]).toBe(null);
+  });
+
   test("Client#getRooms()", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
@@ -114,11 +123,11 @@ describe("Clientのテスト", () => {
     });
   });
 
-  test("Client#getRequestsToContact()", () => {
+  test("Client#getRequestOfContacts()", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const contacts = client.getRequestsToContact();
+    const contacts = client.getRequestOfContacts();
     expect(spy.mock.calls[0][0]).toBe("/incoming_requests");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -130,14 +139,5 @@ describe("Clientのテスト", () => {
     const response = client.sendMessage(123, "test message");
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages");
     expect(spy.mock.calls[0][1]).toStrictEqual({ body: "test message" });
-  });
-
-  test("Client#getRoom()", () => {
-    const request = new HttpRequestMock();
-    const client = new Client(request);
-    const spy = jest.spyOn(request, "get");
-    const response = client.getRoom(123);
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123");
-    expect(spy.mock.calls[0][1]).toBe(null);
   });
 });

@@ -1,14 +1,14 @@
+import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
-import { Chatwork } from "./types/Chatwork";
 
 /**
- * メッセージオブジェクトのクラス
+ * チャットルーム内のメッセージを表すクラス
  *
  * @class Message
- * @implements {Chatwork.Message}
+ * @implements {Types.Message}
  */
-export class Message implements Chatwork.Message {
-  account: Chatwork.Account;
+export class Message implements Types.Message {
+  account: Types.Account;
   body: string;
   send_time: number;
   update_time: number;
@@ -21,6 +21,13 @@ export class Message implements Chatwork.Message {
   roomId: number;
   httpRequest: IHttpRequest;
 
+  /**
+   * Creates an instance of Message.
+   * @param {*} message
+   * @param {number} roomId
+   * @param {IHttpRequest} httpRequest
+   * @memberof Message
+   */
   constructor(message: any, roomId: number, httpRequest: IHttpRequest) {
     this.account = message.account;
     this.body = message.body;
@@ -36,9 +43,9 @@ export class Message implements Chatwork.Message {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-message_id
    *
    * @param {string} body 更新するメッセージ本文
-   * @returns {Chatwork.MessageId} 削除したメッセージのID
+   * @returns {Types.MessageId} 削除したメッセージのID
    */
-  public update(body: string): Chatwork.MessageId {
+  public update(body: string): Types.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     const payload = { body: body };
     return this.httpRequest.put(endpoint, payload);
@@ -48,10 +55,36 @@ export class Message implements Chatwork.Message {
    * メッセージを削除する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id-messages-message_id
    *
-   * @returns {Chatwork.MessageId} 削除したメッセージのID
+   * @returns {Types.MessageId} 削除したメッセージのID
    */
-  public delete(): Chatwork.MessageId {
+  public delete(): Types.MessageId {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + this.message_id;
     return this.httpRequest.delete(endpoint, null);
+  }
+
+  /**
+   * メッセージを既読にする
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-read
+   *
+   * @returns {Types.ReadInformation} 未読メッセージの情報
+   * @memberof Room
+   */
+  public read(): Types.ReadInformation {
+    const endpoint = "/rooms/" + this.roomId + "/messages/read";
+    return this.httpRequest.put(endpoint, null);
+  }
+
+  /**
+   * メッセージを未読にする
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-unread
+   *
+   * @returns {Types.ReadInformation} 未読メッセージの情報
+   * @memberof Room
+   */
+  public unread(): Types.ReadInformation {
+    const endpoint = "/rooms/" + this.roomId + "/messages/unread";
+    const payload = { message_id: this.message_id };
+    return this.httpRequest.put(endpoint, payload);
+
   }
 }
