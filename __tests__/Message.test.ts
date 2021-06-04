@@ -19,7 +19,7 @@ describe("Messageのテスト", () => {
      * @type {number}
      * @memberof Message
      */
-    room_id: 123,
+    roomId: 123,
   };
   beforeEach(() => {
     return HttpRequestMock.mockImplementation(() => {
@@ -52,7 +52,7 @@ describe("Messageのテスト", () => {
 
   test("Message#update()", () => {
     const request = new HttpRequestMock();
-    const message = new Message(messageData, messageData.room_id, request);
+    const message = new Message(messageData, messageData.roomId, request);
     const spy = jest.spyOn(request, "put");
     const messageId = message.update("message updated.");
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
@@ -63,7 +63,7 @@ describe("Messageのテスト", () => {
 
   test("Message#delete()", () => {
     const request = new HttpRequestMock();
-    const message = new Message(messageData, messageData.room_id, request);
+    const message = new Message(messageData, messageData.roomId, request);
     const spy = jest.spyOn(request, "delete");
     const messageId = message.delete();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
