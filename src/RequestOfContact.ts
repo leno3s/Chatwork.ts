@@ -44,7 +44,7 @@ export class RequestOfContact implements Types.RequestOfContact {
    * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#PUT-incoming_requests-request_id
    *
    * @returns {Types.ContactedUser} 承認した相手のユーザー情報
-   * @memberof Client
+   * @memberof RequestOfContact
    */
   accept(): Types.ContactedUser {
     const endpoint = "/incoming_requests/" + this.request_id;
@@ -55,7 +55,7 @@ export class RequestOfContact implements Types.RequestOfContact {
    * コンタクト承認依頼をキャンセルする
    * https://developer.chatwork.com/ja/endpoint_incoming_requests.html#DELETE-incoming_requests-request_id
    *
-   * @memberof Client
+   * @memberof RequestOfContact
    */
   deny(): void {
     const endpoint = "/incoming_requests/" + this.request_id;

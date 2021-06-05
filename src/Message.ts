@@ -67,7 +67,7 @@ export class Message implements Types.Message {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-read
    *
    * @returns {Types.ReadInformation} 未読メッセージの情報
-   * @memberof Room
+   * @memberof Message
    */
   public read(): Types.ReadInformation {
     const endpoint = "/rooms/" + this.roomId + "/messages/read";
@@ -79,12 +79,11 @@ export class Message implements Types.Message {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-messages-unread
    *
    * @returns {Types.ReadInformation} 未読メッセージの情報
-   * @memberof Room
+   * @memberof Message
    */
   public unread(): Types.ReadInformation {
     const endpoint = "/rooms/" + this.roomId + "/messages/unread";
     const payload = { message_id: this.message_id };
     return this.httpRequest.put(endpoint, payload);
-
   }
 }

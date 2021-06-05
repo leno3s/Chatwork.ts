@@ -97,7 +97,7 @@ export class Client implements Types.Client {
    * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id
    *
    * @returns {Types.Room} チャットの名前、アイコン、種類(my/direct/group)
-   * @memberof Room
+   * @memberof Client
    */
   public getRoom(roomId: number): Types.Room {
     const endpoint = "/rooms/" + roomId;
