@@ -1,4 +1,4 @@
-import { Chatwork, Client, HttpRequestNode, Room } from "../src/index";
+import { Client, HttpRequestNode, Room, RoomTask } from "../src/index";
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
@@ -145,7 +145,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "get");
-    let tasks: Chatwork.Task[];
+    let tasks: RoomTask[];
     expect(() => {
       tasks = room.getTasks(111, 222, "open");
     }).toThrow();
