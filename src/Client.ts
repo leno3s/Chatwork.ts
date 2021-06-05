@@ -1,6 +1,7 @@
 import * as Types from "./Types";
 import { Room } from "./Room";
 import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
+import { MyTask } from "./MyTask";
 
 /**
  * Chatwork API wrapper
@@ -68,7 +69,7 @@ export class Client implements Types.Client {
   public getMyTasks(
     assignor_id?: number,
     status?: Types.taskStatus
-  ): Types.Task[] {
+  ): MyTask[] {
     const param: {
       assigned_by_account_id?: number;
       status?: Types.taskStatus;
@@ -76,7 +77,8 @@ export class Client implements Types.Client {
     if (assignor_id !== undefined)
       param["assigned_by_account_id"] = assignor_id;
     if (status !== undefined) param["status"] = status;
-    return this.httpRequest.get("/my/tasks", param);
+    const response = this.httpRequest.get("/my/tasks", param) as Array<any>;
+    return response.map((t) => new MyTask(t, this.httpRequest));
   }
 
   /**

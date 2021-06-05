@@ -175,7 +175,6 @@ export interface Link {
 }
 
 export interface Task extends TaskId {
-  account: Account;
   assigned_by_account: Account;
   message_id: string;
   body: string;
