@@ -110,7 +110,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "get");
-    let messages
+    let messages;
     expect(() => {
       messages = room.getMessages(1);
     }).toThrow();
@@ -137,7 +137,7 @@ describe("Clientのテスト", () => {
     const messageId = room.read("123456789");
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/read");
     expect(spy.mock.calls[0][1]).toStrictEqual({
-      message_id: "123456789"
+      message_id: "123456789",
     });
   });
 
@@ -171,15 +171,15 @@ describe("Clientのテスト", () => {
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "post");
     const link = room.createLink(
-        "link_string",
-        "the link's description.",
-        true
+      "link_string",
+      "the link's description.",
+      true
     );
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
     expect(spy.mock.calls[0][1]).toStrictEqual({
-        code: "link_string",
-        description: "the link's description.",
-        need_acceptance: true
+      code: "link_string",
+      description: "the link's description.",
+      need_acceptance: true,
     });
   });
 });

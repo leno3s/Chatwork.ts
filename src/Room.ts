@@ -196,10 +196,7 @@ export class Room implements Types.Room {
    * @returns {Types.MessageId} 送信したメッセージのMessageID
    * @memberof Room
    */
-  public sendMessage(
-    message: string,
-    isSelfUnread?: 0 | 1
-  ): Types.MessageId {
+  public sendMessage(message: string, isSelfUnread?: 0 | 1): Types.MessageId {
     const endpoint = "/rooms/" + this.room_id + "/messages";
     const payload: { body: string; self_unread?: 0 | 1 } = { body: message };
     if (isSelfUnread !== undefined) payload.self_unread = isSelfUnread;
@@ -246,7 +243,9 @@ export class Room implements Types.Room {
     if (assignor_id !== undefined) payload.assigned_by_account_id = assignor_id;
     if (status !== undefined) payload.status = status;
     const response = this.httpRequest.get(endpoint, payload) as Array<any>;
-    return response.map((t: any) => new RoomTask(t, this.room_id, this.httpRequest));
+    return response.map(
+      (t: any) => new RoomTask(t, this.room_id, this.httpRequest)
+    );
   }
 
   /**

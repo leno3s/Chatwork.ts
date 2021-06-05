@@ -30,7 +30,7 @@ describe("Clientのテスト", () => {
     room: {
       room_id: 123,
       name: "leno3s",
-      avatar_image_url: "https://example.com/icon_path.png"
+      avatar_image_url: "https://example.com/icon_path.png",
     },
     assigned_by_account: {
       chatwork_id: "leno3s",

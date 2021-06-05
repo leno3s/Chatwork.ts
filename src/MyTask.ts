@@ -14,7 +14,7 @@ export class MyTask extends Task {
     name: string;
     icon_path: string;
   };
-  
+
   /**
    * Creates an instance of MyTask.
    * @param {*} task

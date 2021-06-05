@@ -66,10 +66,7 @@ export class Client implements Types.Client {
    * @returns {Types.Task[]} タスクの一覧
    * @memberof Client
    */
-  public getMyTasks(
-    assignor_id?: number,
-    status?: Types.taskStatus
-  ): MyTask[] {
+  public getMyTasks(assignor_id?: number, status?: Types.taskStatus): MyTask[] {
     const param: {
       assigned_by_account_id?: number;
       status?: Types.taskStatus;
