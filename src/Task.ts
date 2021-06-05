@@ -8,7 +8,6 @@ import { IHttpRequest } from "./IHttpRequest";
  * @implements {Types.Task}
  */
 export class Task implements Types.Task {
-  account: Types.Account;
   assigned_by_account: Types.Account;
   message_id: string;
   body: string;
@@ -26,7 +25,6 @@ export class Task implements Types.Task {
    * @memberof Task
    */
   constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
-    this.account = task.account;
     this.assigned_by_account = task.assigned_by_account;
     this.message_id = task.message_id;
     this.body = task.body;

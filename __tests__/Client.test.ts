@@ -1,4 +1,5 @@
 import { Client, HttpRequestNode } from "../src/index";
+import { MyTask } from "../src/MyTask";
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
@@ -63,7 +64,10 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const tasks = client.getMyTasks();
+    let tasks: MyTask[];
+    expect(() => {
+      tasks = client.getMyTasks();
+    }).toThrow();
     expect(spy.mock.calls[0][0]).toBe("/my/tasks");
     expect(spy.mock.calls[0][1]).not.toBeNull();
   });

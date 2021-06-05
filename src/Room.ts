@@ -2,6 +2,7 @@ import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
 import { Message } from "./Message";
 import { Task } from "./Task";
+import { RoomTask } from "./RoomTask";
 
 /**
  * チャットルームを表すクラス
@@ -234,7 +235,7 @@ export class Room implements Types.Room {
     account_id?: number,
     assignor_id?: number,
     status?: Types.taskStatus
-  ): Types.Task[] {
+  ): RoomTask[] {
     const endpoint = "/rooms/" + this.room_id + "/tasks";
     const payload: {
       account_id?: number;
@@ -245,7 +246,7 @@ export class Room implements Types.Room {
     if (assignor_id !== undefined) payload.assigned_by_account_id = assignor_id;
     if (status !== undefined) payload.status = status;
     const response = this.httpRequest.get(endpoint, payload) as Array<any>;
-    return response.map((t: any) => new Task(t, this.room_id, this.httpRequest));
+    return response.map((t: any) => new RoomTask(t, this.room_id, this.httpRequest));
   }
 
   /**
