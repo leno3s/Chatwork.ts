@@ -1,5 +1,4 @@
-import { IHttpRequest } from "./IHttpRequest";
-import { Task } from "./Task";
+import { IHttpRequest, Task } from "src";
 
 /**
  * GET /my/tasks のレスポンスにおけるTask
@@ -21,7 +20,7 @@ export class MyTask extends Task {
    * @param {IHttpRequest} httpRequest
    * @memberof MyTask
    */
-  constructor(task: any, httpRequest: IHttpRequest) {
+  public constructor(task: any, httpRequest: IHttpRequest) {
     super(task, task.room.room_id, httpRequest);
     this.room = task.room;
   }
