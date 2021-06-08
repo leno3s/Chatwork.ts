@@ -3,7 +3,8 @@ import { Task } from "./Task";
 import { Account } from "./Types";
 
 /**
- * GET /rooms/${room_id}/tasks のレスポンスにおけるTask
+ * GET /rooms/${room_id}/tasks のレスポンスにおけるタスク
+ * GET /my/tasks と違いがある
  *
  * @export
  * @class RoomTask

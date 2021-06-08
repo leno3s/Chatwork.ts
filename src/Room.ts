@@ -1,8 +1,13 @@
-import * as Types from "./Types";
-import { IHttpRequest } from "./IHttpRequest";
-import { Message } from "./Message";
-import { Task } from "./Task";
-import { RoomTask } from "./RoomTask";
+import {
+  ChatType,
+  IHttpRequest,
+  Link,
+  Message,
+  RoomMemberPermissions,
+  RoomTask,
+  Task,
+  Types,
+} from "src";
 
 /**
  * チャットルームを表すクラス
@@ -12,19 +17,19 @@ import { RoomTask } from "./RoomTask";
  */
 export class Room implements Types.Room {
   name: string;
-  type: Types.chatType;
+  chatType: ChatType;
   role: string;
   sticky: boolean;
-  unread_num: number;
-  mention_num: number;
-  mytask_num: number;
-  message_num: number;
-  file_num: number;
-  task_num: number;
-  icon_path: string;
-  last_update_time: number;
+  unreadNum: number;
+  mentionNum: number;
+  myTaskNum: number;
+  messageNum: number;
+  fileNum: number;
+  taskNum: number;
+  iconUrl: string;
+  lastUpdateTime: number;
   description: string;
-  room_id: number;
+  roomId: number;
   httpRequest: IHttpRequest;
 
   /**
@@ -33,21 +38,21 @@ export class Room implements Types.Room {
    * @param {IHttpRequest} httpRequest
    * @memberof Room
    */
-  constructor(roomInfo: any, httpRequest: IHttpRequest) {
+  public constructor(roomInfo: any, httpRequest: IHttpRequest) {
     this.name = roomInfo.name;
-    this.type = roomInfo.type;
+    this.chatType = roomInfo.type;
     this.role = roomInfo.role;
     this.sticky = roomInfo.sticky;
-    this.unread_num = roomInfo.unread_num;
-    this.mention_num = roomInfo.mention_num;
-    this.mytask_num = roomInfo.mytask_num;
-    this.message_num = roomInfo.message_num;
-    this.file_num = roomInfo.file_num;
-    this.task_num = roomInfo.task_num;
-    this.icon_path = roomInfo.icon_path;
-    this.last_update_time = roomInfo.last_update_time;
+    this.unreadNum = roomInfo.unread_num;
+    this.mentionNum = roomInfo.mention_num;
+    this.myTaskNum = roomInfo.mytask_num;
+    this.messageNum = roomInfo.message_num;
+    this.fileNum = roomInfo.file_num;
+    this.taskNum = roomInfo.task_num;
+    this.iconUrl = roomInfo.icon_path;
+    this.lastUpdateTime = roomInfo.last_update_time;
     this.description = roomInfo.description;
-    this.room_id = roomInfo.room_id;
+    this.roomId = roomInfo.room_id;
     this.httpRequest = httpRequest;
   }
 
@@ -66,7 +71,7 @@ export class Room implements Types.Room {
     description?: string,
     icon_preset?: Types.iconPreset
   ): Types.RoomId {
-    const endpoint = "/rooms/" + this.room_id;
+    const endpoint = "/rooms/" + this.roomId;
     if (!(roomName || description || icon_preset)) {
       throw Error("At least one argument is required.");
     }
@@ -95,7 +100,7 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public leave(): void {
-    const endpoint = "/rooms/" + this.room_id;
+    const endpoint = "/rooms/" + this.roomId;
     const payload = { action_type: "leave" };
     this.httpRequest.delete(endpoint, payload);
     return;
@@ -109,7 +114,7 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public delete(): void {
-    const endpoint = "/rooms/" + this.room_id;
+    const endpoint = "/rooms/" + this.roomId;
     const payload = { action_type: "delete" };
     this.httpRequest.delete(endpoint, payload);
     return;
@@ -123,7 +128,7 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public getMembers(): Types.RoledUser[] {
-    const endpoint = "/rooms/" + this.room_id + "/members";
+    const endpoint = "/rooms/" + this.roomId + "/members";
     return this.httpRequest.get(endpoint, null);
   }
 
@@ -134,15 +139,15 @@ export class Room implements Types.Room {
    * @param {number[]} adminIds 作成したチャットに参加メンバーのうち、管理者権限にしたいユーザーのアカウントIDの配列。最低1人は指定する必要がある。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @param {number[]} memberIds 作成したチャットに参加メンバーのうち、メンバー権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
    * @param {number[]} readonlyIds 作成したチャットに参加メンバーのうち、閲覧のみ権限にしたいユーザーのアカウントIDの配列。コンタクト済みユーザーか組織内ユーザーのアカウントIDのみ指定できる。
-   * @returns {Types.RoomMemberPermissions} チャットルームのメンバーの権限のリスト
+   * @returns {RoomMemberPermissions} チャットルームのメンバーの権限のリスト
    * @memberof Room
    */
   public updateMembers(
     adminIds: number[],
     memberIds?: number[],
     readonlyIds?: number[]
-  ): Types.RoomMemberPermissions {
-    const endpoint = "/rooms/" + this.room_id + "/members";
+  ): RoomMemberPermissions {
+    const endpoint = "/rooms/" + this.roomId + "/members";
     const payload: {
       members_admin_ids: string;
       members_member_ids?: string;
@@ -164,9 +169,9 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public getMessage(messageId: number): Types.Message {
-    const endpoint = "/rooms/" + this.room_id + "/messages/" + messageId;
+    const endpoint = "/rooms/" + this.roomId + "/messages/" + messageId;
     const response = this.httpRequest.get(endpoint, null);
-    return new Message(response, this.room_id, this.httpRequest);
+    return new Message(response, this.roomId, this.httpRequest);
   }
 
   /**
@@ -179,11 +184,11 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public getMessages(force: 0 | 1): Types.Message[] {
-    const endpoint = "/rooms/" + this.room_id + "/messages";
+    const endpoint = "/rooms/" + this.roomId + "/messages";
     const payload: { force?: 0 | 1 } = {};
     if (force !== undefined) payload.force = force;
     const response = this.httpRequest.get(endpoint, payload) as Array<any>;
-    return response.map((m) => new Message(m, this.room_id, this.httpRequest));
+    return response.map((m) => new Message(m, this.roomId, this.httpRequest));
   }
 
   /**
@@ -197,7 +202,7 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public sendMessage(message: string, isSelfUnread?: 0 | 1): Types.MessageId {
-    const endpoint = "/rooms/" + this.room_id + "/messages";
+    const endpoint = "/rooms/" + this.roomId + "/messages";
     const payload: { body: string; self_unread?: 0 | 1 } = { body: message };
     if (isSelfUnread !== undefined) payload.self_unread = isSelfUnread;
     return this.httpRequest.post(endpoint, payload);
@@ -212,7 +217,7 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public read(messageId?: string): Types.ReadInformation {
-    const endpoint = "/rooms/" + this.room_id + "/messages/read";
+    const endpoint = "/rooms/" + this.roomId + "/messages/read";
     const payload: { message_id?: string } = {};
     if (messageId !== undefined) payload.message_id = messageId;
     return this.httpRequest.put(endpoint, payload);
@@ -233,7 +238,7 @@ export class Room implements Types.Room {
     assignor_id?: number,
     status?: Types.taskStatus
   ): RoomTask[] {
-    const endpoint = "/rooms/" + this.room_id + "/tasks";
+    const endpoint = "/rooms/" + this.roomId + "/tasks";
     const payload: {
       account_id?: number;
       assigned_by_account_id?: number;
@@ -244,7 +249,7 @@ export class Room implements Types.Room {
     if (status !== undefined) payload.status = status;
     const response = this.httpRequest.get(endpoint, payload) as Array<any>;
     return response.map(
-      (t: any) => new RoomTask(t, this.room_id, this.httpRequest)
+      (t: any) => new RoomTask(t, this.roomId, this.httpRequest)
     );
   }
 
@@ -266,7 +271,7 @@ export class Room implements Types.Room {
     limit?: number,
     limitType?: Types.limitType
   ): Types.TaskId[] {
-    const endpoint = "/rooms/" + this.room_id + "/tasks";
+    const endpoint = "/rooms/" + this.roomId + "/tasks";
     const ids: string = toIds.join(",");
     const payload: {
       body: string;
@@ -291,9 +296,9 @@ export class Room implements Types.Room {
    * @memberof Room
    */
   public getTask(taskId: number): Types.Task {
-    const endpoint = "/rooms/" + this.room_id + "/tasks/" + taskId;
+    const endpoint = "/rooms/" + this.roomId + "/tasks/" + taskId;
     const response = this.httpRequest.get(endpoint, null);
-    return new Task(response, this.room_id, this.httpRequest);
+    return new Task(response, this.roomId, this.httpRequest);
   }
 
   public getFiles(uploaderId?: number): Types.File[] {
@@ -312,11 +317,11 @@ export class Room implements Types.Room {
    * 招待リンクを取得する
    * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-link
    *
-   * @returns {Types.Link} リンクの情報
+   * @returns {Link} リンクの情報
    * @memberof Room
    */
-  public getLink(): Types.Link {
-    const endpoint = "/rooms/" + this.room_id + "/link";
+  public getLink(): Link {
+    const endpoint = "/rooms/" + this.roomId + "/link";
     return this.httpRequest.get(endpoint, null);
   }
 
@@ -330,15 +335,15 @@ export class Room implements Types.Room {
    * リンクページに表示される説明文。
    * @param {boolean} needAcceptance 承認要否
    * 参加に管理者の承認を必要とするか。
-   * @returns {Types.Link} リンクの情報
+   * @returns {Link} リンクの情報
    * @memberof Room
    */
   public createLink(
     path?: string,
     description?: string,
     needAcceptance?: boolean
-  ): Types.Link {
-    const endpoint = "/rooms/" + this.room_id + "/link";
+  ): Link {
+    const endpoint = "/rooms/" + this.roomId + "/link";
     const payload: {
       code?: string;
       description?: string;

@@ -1,5 +1,4 @@
-import * as Types from "./Types";
-import { IHttpRequest } from "./IHttpRequest";
+import { IHttpRequest, Types } from "src";
 
 /**
  * タスクを表すクラス
@@ -8,12 +7,12 @@ import { IHttpRequest } from "./IHttpRequest";
  * @implements {Types.Task}
  */
 export class Task implements Types.Task {
-  assigned_by_account: Types.Account;
-  message_id: string;
+  assignedByAccount: Types.Account;
+  messageId: string;
   body: string;
-  limit_time: number;
+  limitTime: number;
   status: string;
-  task_id: number;
+  taskId: number;
   roomId: number;
   httpRequest: IHttpRequest;
 
@@ -25,12 +24,12 @@ export class Task implements Types.Task {
    * @memberof Task
    */
   constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
-    this.assigned_by_account = task.assigned_by_account;
-    this.message_id = task.message_id;
+    this.assignedByAccount = task.assigned_by_account;
+    this.messageId = task.message_id;
     this.body = task.body;
-    this.limit_time = task.limit_time;
+    this.limitTime = task.limit_time;
     this.status = task.status;
-    this.task_id = task.task_id;
+    this.taskId = task.task_id;
     this.roomId = roomId;
     this.httpRequest = httpRequest;
   }
@@ -45,7 +44,7 @@ export class Task implements Types.Task {
    */
   public update(status: Types.taskStatus): Types.TaskId {
     const endpoint =
-      "/rooms/" + this.roomId + "/tasks/" + this.task_id + "/status";
+      "/rooms/" + this.roomId + "/tasks/" + this.taskId + "/status";
     const payload = { body: status };
     return this.httpRequest.put(endpoint, payload);
   }

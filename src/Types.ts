@@ -3,15 +3,15 @@
 // Definitions by: leno3s <https://github.com/leno3s>
 
 export interface Account {
-  account_id: number;
+  accountId: number;
   name: string;
-  avatar_image_url: string;
+  avatarImageUrl: string;
 }
 
 export interface User extends Account {
-  chatwork_id: string;
-  organization_id: number;
-  organization_name: string;
+  chatworkId: string;
+  organizationId: number;
+  organizationName: string;
   department: string;
 }
 
@@ -20,7 +20,7 @@ export interface RoledUser extends User {
 }
 
 export interface ContactedUser extends User {
-  room_id: number;
+  roomId: number;
 }
 
 export interface Me extends ContactedUser {
@@ -28,29 +28,29 @@ export interface Me extends ContactedUser {
   url: string;
   introduction: string;
   mail: string;
-  tel_organization: string;
-  tel_extension: string;
-  tel_mobile: string;
+  telOrganization: string;
+  telExtension: string;
+  telMobile: string;
   skype: string;
   facebook: string;
   twitter: string;
-  login_mail: string;
+  loginMail: string;
 }
 
 export interface ReadInformation {
-  unread_num: number;
-  mention_num: number;
+  unreadNum: number;
+  mentionNum: number;
 }
 
 export interface MyStatus extends ReadInformation {
-  unread_room_num: number;
-  mention_room_num: number;
-  mytask_room_num: number;
-  mytask_num: number;
+  unreadRoomNum: number;
+  mentionRoomNum: number;
+  myTaskRoomNum: number;
+  myTaskNum: number;
 }
 
 export interface RoomId {
-  room_id: number;
+  roomId: number;
 }
 
 export interface RoomMemberPermissions {
@@ -60,15 +60,15 @@ export interface RoomMemberPermissions {
 }
 
 export interface MessageId {
-  message_id: string;
+  messageId: string;
 }
 
 export interface TaskId {
-  task_id: number;
+  taskId: number;
 }
 
 export interface FileId {
-  file_id: number;
+  fileId: number;
 }
 
 export interface Client {
@@ -77,7 +77,7 @@ export interface Client {
 
   // endpoint of /my/...
   getMyStatus(): MyStatus;
-  getMyTasks(assignor_id?: number, status?: taskStatus): Array<Task>;
+  getMyTasks(assignorId?: number, status?: taskStatus): Array<Task>;
 
   // endpoint of /contacts
   getContacts(): Array<ContactedUser>;
@@ -103,21 +103,21 @@ export interface Client {
 
 export interface Room extends RoomId, ReadInformation {
   name: string;
-  type: chatType;
+  chatType: chatType;
   role: string;
   sticky: boolean;
-  mytask_num: number;
-  message_num: number;
-  file_num: number;
-  task_num: number;
-  icon_path: string;
-  last_update_time: number;
+  myTaskNum: number;
+  messageNum: number;
+  fileNum: number;
+  taskNum: number;
+  iconUrl: string;
+  lastUpdateTime: number;
   description: string;
 
   update(
     roomName?: string,
     description?: string,
-    icon_preset?: iconPreset
+    iconPreset?: iconPreset
   ): RoomId;
   leave(): void;
   delete(): void;
@@ -157,8 +157,8 @@ export interface Room extends RoomId, ReadInformation {
 export interface Message extends MessageId {
   account: Account;
   body: string;
-  send_time: number;
-  update_time: number;
+  sendTime: number;
+  updateTime: number;
   update(body: string): MessageId;
   delete(): MessageId;
   read(): ReadInformation;
@@ -168,40 +168,40 @@ export interface Message extends MessageId {
 export interface Link {
   public: boolean;
   url: string;
-  need_acceptance: boolean;
+  needAcceptance: boolean;
   description: string;
   update(path?: string, description?: string, needAcceptance?: boolean): Link;
   delete(): { public: false };
 }
 
 export interface Task extends TaskId {
-  assigned_by_account: Account;
-  message_id: string;
+  assignedByAccount: Account;
+  messageId: string;
   body: string;
-  limit_time: number;
+  limitTime: number;
   status: string;
   update(status: taskStatus): TaskId;
 }
 
 export interface File extends FileId {
-  file_id: number;
+  fileId: number;
   account: Account;
   message_id: string;
   filename: string;
-  filesize: number;
-  upload_time: number;
+  fileSize: number;
+  uploadTime: number;
 }
 
 export interface RequestOfContact {
-  request_id: number;
+  requestId: number;
   message: string;
-  chatwork_id: string;
-  organization_id: number;
-  organization_name: string;
+  chatworkId: string;
+  organizationId: number;
+  organizationName: string;
   department: string;
-  account_id: number;
+  accountId: number;
   name: string;
-  avatar_image_url: string;
+  avatarImageUrl: string;
   accept(): ContactedUser;
   deny(): void;
 }
