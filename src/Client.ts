@@ -206,7 +206,7 @@ export class Client implements Types.Client {
     const endpoint = "/rooms/" + roomId + "/messages";
     const postData = { body: message };
     const response = this.httpRequest.post(endpoint, postData);
-    return new MessageId(response);
+    return new MessageId(response, roomId, this.httpRequest);
   }
 
   /**
@@ -216,7 +216,8 @@ export class Client implements Types.Client {
    * @memberof Client
    */
   public sendMessageToMyChat(message: string): MessageId {
-    let me = this.httpRequest.get("/me", null);
-    return this.sendMessage(me.room_id, message);
+    const me = this.httpRequest.get("/me", null);
+    const response = this.sendMessage(me.room_id, message);
+    return new MessageId(response, me.room_id, this.httpRequest);
   }
 }
