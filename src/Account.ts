@@ -1,4 +1,4 @@
-import { Types } from "src";
+import * as Types from "./Types";
 
 /**
  * アカウントを表すクラス

@@ -1,4 +1,5 @@
-import { IHttpRequest, Task } from "src";
+import { IHttpRequest } from "./IHttpRequest";
+import { Task } from "./Task";
 
 /**
  * GET /my/tasks のレスポンスにおけるTask

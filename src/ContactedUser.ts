@@ -1,4 +1,7 @@
-import { IHttpRequest, Room, Types, User } from "src";
+import * as Types from "./Types";
+import { IHttpRequest } from "./IHttpRequest";
+import { Room } from "./Room";
+import { User } from "./User";
 
 /**
  * コンタクトに追加済みのユーザーを表すクラス

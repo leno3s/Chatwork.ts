@@ -1,5 +1,6 @@
-import { Room, Types } from "src";
+import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
+import { Room } from "./Room";
 
 /**
  * ルームIDを表すクラス

@@ -1,4 +1,5 @@
-import { IHttpRequest, Types } from "src";
+import * as Types from "./Types";
+import { IHttpRequest } from "./IHttpRequest";
 
 /**
  * タスクを表すクラス

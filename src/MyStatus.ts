@@ -1,4 +1,5 @@
-import { ReadInformation, Types } from "src";
+import * as Types from "./Types";
+import { ReadInformation } from "./ReadInformation";
 
 /**
  * 自身の情報を表すクラス

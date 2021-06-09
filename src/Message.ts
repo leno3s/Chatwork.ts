@@ -1,6 +1,8 @@
 import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
-import { MessageId, ReadInformation, Room } from "src";
+import { MessageId } from "./MessageId";
+import { ReadInformation } from "./ReadInformation";
+import { Room } from "./Room";
 
 /**
  * チャットルーム内のメッセージを表すクラス
