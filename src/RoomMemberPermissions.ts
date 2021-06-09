@@ -1,4 +1,4 @@
-import { Room, Types } from "src";
+import * as Types from "./Types";
 
 /**
  * ルームのメンバーの権限を表すクラス

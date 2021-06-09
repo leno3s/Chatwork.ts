@@ -1,4 +1,6 @@
-import { IHttpRequest, Room, Types } from "src";
+import * as Types from "./Types";
+import { IHttpRequest } from "./IHttpRequest";
+import { Room } from "./Room";
 
 /**
  * グループチャットへの招待リンクを表すクラス

@@ -1,6 +1,6 @@
 import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
-import { ContactedUser } from "src";
+import { ContactedUser } from "./index";
 
 /**
  * コンタクト追加依頼を表すクラス

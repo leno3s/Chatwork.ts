@@ -1,13 +1,11 @@
-import {
-  ChatType,
-  IHttpRequest,
-  Link,
-  Message,
-  RoomMemberPermissions,
-  RoomTask,
-  Task,
-  Types,
-} from "src";
+import { ChatType } from "./ChatType";
+import { IHttpRequest } from "./IHttpRequest";
+import { RoledUser, Types } from "./index";
+import { Link } from "./Link";
+import { Message } from "./Message";
+import { RoomMemberPermissions } from "./RoomMemberPermissions";
+import { RoomTask } from "./RoomTask";
+import { Task } from "./Task";
 
 /**
  * チャットルームを表すクラス

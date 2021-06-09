@@ -1,4 +1,7 @@
-import { IHttpRequest, Message, Room, Types } from "src";
+import * as Types from "./Types";
+import { IHttpRequest } from "./IHttpRequest";
+import { Message } from "./Message";
+import { Room } from "./Room";
 
 /**
  * メッセージIDを表すクラス

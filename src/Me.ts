@@ -1,4 +1,6 @@
-import { ContactedUser, IHttpRequest, Types } from "src";
+import * as Types from "./Types";
+import { ContactedUser } from "./ContactedUser";
+import { IHttpRequest } from "./IHttpRequest";
 
 /**
  * 自身の情報を表すクラス

@@ -1,4 +1,4 @@
-import { Types } from "src";
+import * as Types from "./Types";
 
 /**
  * 既読数・メンション数を表すクラス

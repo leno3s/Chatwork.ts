@@ -1,17 +1,15 @@
-import {
-  ContactedUser,
-  IconPresetType,
-  IHttpRequest,
-  Me,
-  MessageId,
-  MyStatus,
-  MyTask,
-  RequestOfContact,
-  Room,
-  RoomId,
-  TaskStatusType,
-} from "src";
-import { createHttpRequest } from "./IHttpRequest";
+import * as Types from "./Types";
+import { createHttpRequest, IHttpRequest } from "./IHttpRequest";
+import { Me } from "./Me";
+import { MyStatus } from "./MyStatus";
+import { MyTask } from "./MyTask";
+import { TaskStatusType } from "./TaskStatusType";
+import { Room } from "./Room";
+import { ContactedUser } from "./ContactedUser";
+import { IconPresetType } from "./IconPresetType";
+import { RoomId } from "./RoomId";
+import { RequestOfContact } from "./RequestOfContact";
+import { MessageId } from "./MessageId";
 
 /**
  * Chatwork API wrapper
@@ -24,7 +22,7 @@ import { createHttpRequest } from "./IHttpRequest";
  * @class Client
  * @implements {Client}
  */
-export class Client implements Client {
+export class Client implements Types.Client {
   httpRequest: IHttpRequest;
 
   public constructor(httpRequest: IHttpRequest) {

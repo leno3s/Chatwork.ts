@@ -1,6 +1,6 @@
+import { Account } from "./Account";
 import { IHttpRequest } from "./IHttpRequest";
 import { Task } from "./Task";
-import { Account } from "./Types";
 
 /**
  * GET /rooms/${room_id}/tasks のレスポンスにおけるタスク
