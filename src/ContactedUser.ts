@@ -23,7 +23,7 @@ export class ContactedUser extends User implements Types.ContactedUser {
    */
   public constructor(contactedUser: any, httpRequest: IHttpRequest) {
     super(contactedUser);
-    this.roomId = contactedUser.roomId;
+    this.roomId = contactedUser.room_id;
     this.httpRequest = httpRequest;
   }
 
