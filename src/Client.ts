@@ -153,27 +153,27 @@ export class Client implements Types.Client {
   ): RoomId {
     let param: {
       name: string;
-      membersAdminIds: string;
+      members_admin_ids: string;
       description?: string;
-      iconPreset?: IconPresetType;
+      icon_preset?: IconPresetType;
       link?: boolean;
-      linkNeedAcceptance?: boolean;
-      linkCode?: string;
-      membersMemberIds?: string;
-      membersReadonlyIds?: string;
+      link_need_acceptance?: boolean;
+      link_code?: string;
+      members_member_ids?: string;
+      members_readonly_ids?: string;
     } = {
       name: roomName,
-      membersAdminIds: adminIds.join(","),
+      members_admin_ids: adminIds.join(","),
     };
     if (description !== undefined) param.description = description;
-    if (iconPreset !== undefined) param.iconPreset = iconPreset;
+    if (iconPreset !== undefined) param.icon_preset = iconPreset;
     if (isCreateLink !== undefined) param.link = isCreateLink;
     if (isNeedAcceptance !== undefined)
-      param.linkNeedAcceptance = isNeedAcceptance;
-    if (linkPath !== undefined) param.linkCode = linkPath;
-    if (memberIds !== undefined) param.membersMemberIds = memberIds.join(",");
+      param.link_need_acceptance = isNeedAcceptance;
+    if (linkPath !== undefined) param.link_code = linkPath;
+    if (memberIds !== undefined) param.members_member_ids = memberIds.join(",");
     if (readonlyIds !== undefined)
-      param.membersReadonlyIds = readonlyIds.join(",");
+      param.members_readonly_ids = readonlyIds.join(",");
     const response = this.httpRequest.post("/rooms", param);
     return new RoomId(response, this.httpRequest);
   }
