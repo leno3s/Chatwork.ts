@@ -1,21 +1,17 @@
-import { RequestOfContact } from "../src/RequestOfContact";
 import { HttpRequestNode } from "../src/HttpRequestNode";
+import { Link } from "../src/Link";
 
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
-describe("RequestOfContactのテスト", () => {
-  const requestData = {
-    request_id: 123,
-    message: "test contact.",
-    chatwork_id: "exampleMan",
-    organization_id: 12345,
-    organization_name: "Example inc.",
-    department: "",
-    account_id: 123,
-    name: "example man",
-    avatar_image_url: "https://example.com/",
+describe("Linkのテスト", () => {
+  const linkData = {
+      public: true,
+      url: "https://example.com/g/ramdomcode42",
+      need_acceptance: true,
+      description: "this is test link",
   };
+  const roomId = 123;
 
   beforeEach(() => {
     return HttpRequestMock.mockImplementation(() => {
@@ -46,21 +42,34 @@ describe("RequestOfContactのテスト", () => {
     expect(request.delete("foo")).toBe("foo");
   });
 
-  test("RequestOfContact#accept()", () => {
+  test("Link#update()", () => {
     const request = new HttpRequestMock();
-    const requestOfContact = new RequestOfContact(requestData, request);
+    const link = new Link(linkData, roomId, request);
     const spy = jest.spyOn(request, "put");
-    const contact = requestOfContact.accept();
-    expect(spy.mock.calls[0][0]).toBe("/incoming_requests/123");
+    const newLink = link.update("hoge", "description updated.", true);
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
+    expect(spy.mock.calls[0][1]).toStrictEqual({
+        path: "hoge",
+        description: "description updated.",
+        need_acceptance: true
+    })
+  });
+
+  test("Link#delete()", () => {
+    const request = new HttpRequestMock();
+    const link = new Link(linkData, roomId, request);
+    const spy = jest.spyOn(request, "delete");
+    const _ = link.delete();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/link");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
 
-  test("RequestOfContact#deny()", () => {
+  test("Link#getRoom()", () => {
     const request = new HttpRequestMock();
-    const requestOfContact = new RequestOfContact(requestData, request);
-    const spy = jest.spyOn(request, "delete");
-    const _ = requestOfContact.deny();
-    expect(spy.mock.calls[0][0]).toBe("/incoming_requests/123");
+    const link = new Link(linkData, roomId, request);
+    const spy = jest.spyOn(request, "get");
+    const room = link.getRoom();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
 });

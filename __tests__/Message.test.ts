@@ -1,4 +1,7 @@
-import { Message, HttpRequestNode } from "../src/index";
+import { HttpRequestNode } from "../src/HttpRequestNode";
+import { Message } from "../src/Message";
+import { MessageId } from "../src/MessageId";
+
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
@@ -13,7 +16,7 @@ describe("Messageのテスト", () => {
     body: "message body.",
     send_time: 1298905200,
     update_time: 1298905200,
-    message_id: 123456789,
+    message_id: "123456789",
     /**
      * エンドポイントが/rooms/以下の為にroom_idを要求されている
      * @type {number}
@@ -74,16 +77,45 @@ describe("Messageのテスト", () => {
     const request = new HttpRequestMock();
     const message = new Message(messageData, messageData.roomId, request);
     const spy = jest.spyOn(request, "put");
-    const messageId = message.read();
+    const info = message.read();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/read");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
 
-  test("Message#delete()", () => {
+  test("Message#unread()", () => {
     const request = new HttpRequestMock();
     const message = new Message(messageData, messageData.roomId, request);
-    const spy = jest.spyOn(request, "delete");
-    const messageId = message.delete();
+    const spy = jest.spyOn(request, "put");
+    const info = message.unread();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/unread");
+    expect(spy.mock.calls[0][1]).toStrictEqual({
+      message_id: "123456789"
+    });
+  });
+
+  test("Message#getRoom()", () => {
+    const request = new HttpRequestMock();
+    const message = new Message(messageData, messageData.roomId, request);
+    const spy = jest.spyOn(request, "get");
+    const room = message.getRoom();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123");
+    expect(spy.mock.calls[0][1]).toBe(null);
+  });
+
+  test("MessageId#getRoom()", () => {
+    const request = new HttpRequestMock();
+    const message = new MessageId(messageData, messageData.roomId, request);
+    const spy = jest.spyOn(request, "get");
+    const room = message.getRoom();
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123");
+    expect(spy.mock.calls[0][1]).toBe(null);
+  });
+
+  test("MessageId#getMessage()", () => {
+    const request = new HttpRequestMock();
+    const message = new MessageId(messageData, messageData.roomId, request);
+    const spy = jest.spyOn(request, "get");
+    const room = message.getMessage();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
     expect(spy.mock.calls[0][1]).toBe(null);
   });

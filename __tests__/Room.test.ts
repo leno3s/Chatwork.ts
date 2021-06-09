@@ -1,8 +1,11 @@
-import { Client, HttpRequestNode, Room, RoomTask } from "../src/index";
+import { HttpRequestNode } from "../src/HttpRequestNode";
+import { Room } from "../src/Room";
+import { RoomTask } from "../src/RoomTask";
+
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
-describe("Clientのテスト", () => {
+describe("Roomのテスト", () => {
   const roomData = {
     name: "test room",
     type: "direct",
@@ -66,7 +69,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "delete");
-    room.leave();
+    const _ = room.leave();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123");
     expect(spy.mock.calls[0][1]).toStrictEqual({ action_type: "leave" });
   });
@@ -75,7 +78,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "delete");
-    room.delete();
+    const _ = room.delete();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123");
     expect(spy.mock.calls[0][1]).toStrictEqual({ action_type: "delete" });
   });
@@ -84,7 +87,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "get");
-    const members = room.getMembers();
+    expect(() => room.getMembers()).toThrow();
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/members");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -93,7 +96,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "put");
-    const members = room.updateMembers(
+    const perms = room.updateMembers(
       [111, 222, 333],
       [444, 555, 666],
       [777, 888, 999]
@@ -118,7 +121,7 @@ describe("Clientのテスト", () => {
     expect(spy.mock.calls[0][1]).toStrictEqual({ force: 1 });
   });
 
-  test("Room#sendMessages()", () => {
+  test("Room#sendMessage()", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "post");
@@ -134,7 +137,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
     const spy = jest.spyOn(request, "put");
-    const messageId = room.read("123456789");
+    const info = room.read("123456789");
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/read");
     expect(spy.mock.calls[0][1]).toStrictEqual({
       message_id: "123456789",

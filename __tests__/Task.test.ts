@@ -1,11 +1,11 @@
-import { Client, HttpRequestNode } from "../src/index";
+import { HttpRequestNode } from "../src/index";
+import { Task } from "../src/Task";
 import { MyTask } from "../src/MyTask";
 import { RoomTask } from "../src/RoomTask";
-import { Task } from "../src/Task";
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
-describe("Clientのテスト", () => {
+describe("(My|Room)?Taskのテスト", () => {
   const roomId = 123;
   const roomTaskData = {
     account: {
