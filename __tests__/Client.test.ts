@@ -1,5 +1,7 @@
-import { Client, HttpRequestNode } from "../src/index";
+import { Client } from "../src/Client"
 import { MyTask } from "../src/MyTask";
+import { HttpRequestNode } from "../src/HttpRequestNode";
+
 jest.mock("../src/HttpRequestNode");
 const HttpRequestMock = HttpRequestNode as jest.Mock;
 
@@ -33,6 +35,13 @@ describe("Clientのテスト", () => {
     expect(request.delete("foo")).toBe("foo");
   });
 
+  test("Client.factory()", () => {
+    const request = new HttpRequestMock();
+    const spy = jest.spyOn(request, "get");
+    const client = Client.factory("token", HttpRequestMock);
+    expect(client).toBeInstanceOf(Client);
+  });
+
   test("Client#getMe()", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
@@ -46,16 +55,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const me = client.getMyStatus();
-    expect(spy.mock.calls[0][0]).toBe("/my/status");
-    expect(spy.mock.calls[0][1]).toBe(null);
-  });
-
-  test("Client#getMyStatus()", () => {
-    const request = new HttpRequestMock();
-    const client = new Client(request);
-    const spy = jest.spyOn(request, "get");
-    const me = client.getMyStatus();
+    const status = client.getMyStatus();
     expect(spy.mock.calls[0][0]).toBe("/my/status");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -76,7 +76,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const contacts = client.getContacts();
+    expect(() => client.getContacts()).toThrow();
     expect(spy.mock.calls[0][0]).toBe("/contacts");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -85,7 +85,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const response = client.getRoom(123);
+    const room = client.getRoom(123);
     expect(spy.mock.calls[0][0]).toBe("/rooms/123");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -105,7 +105,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "post");
-    const room = client.createNewRoom(
+    const roomId = client.createNewRoom(
       "test room",
       [111, 222, 333],
       "the room's description.",
@@ -131,7 +131,7 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "get");
-    const contacts = client.getRequestOfContacts();
+    expect(() => client.getRequestOfContacts()).toThrow();
     expect(spy.mock.calls[0][0]).toBe("/incoming_requests");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
@@ -140,8 +140,17 @@ describe("Clientのテスト", () => {
     const request = new HttpRequestMock();
     const client = new Client(request);
     const spy = jest.spyOn(request, "post");
-    const response = client.sendMessage(123, "test message");
+    const messageId = client.sendMessage(123, "test message");
     expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages");
+    expect(spy.mock.calls[0][1]).toStrictEqual({ body: "test message" });
+  });
+
+  test("Client#sendMessageToMyChat()", () => {
+    const request = new HttpRequestMock();
+    const client = new Client(request);
+    const spy = jest.spyOn(request, "post");
+    const messageId = client.sendMessageToMyChat("test message");
+    expect(spy.mock.calls[0][0]).toBe("/rooms/undefined/messages");
     expect(spy.mock.calls[0][1]).toStrictEqual({ body: "test message" });
   });
 });
