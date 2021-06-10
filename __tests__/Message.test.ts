@@ -110,13 +110,4 @@ describe("Messageのテスト", () => {
     expect(spy.mock.calls[0][0]).toBe("/rooms/123");
     expect(spy.mock.calls[0][1]).toBe(null);
   });
-
-  test("MessageId#getMessage()", () => {
-    const request = new HttpRequestMock();
-    const message = new MessageId(messageData, messageData.roomId, request);
-    const spy = jest.spyOn(request, "get");
-    const room = message.getMessage();
-    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
-    expect(spy.mock.calls[0][1]).toBe(null);
-  });
 });

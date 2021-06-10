@@ -10,7 +10,7 @@ import { Room } from "./Room";
  * @class Message
  * @implements {Types.Message}
  */
-export class Message implements Types.Message {
+export class Message extends MessageId implements Types.Message {
   account: Types.Account;
   body: string;
   sendTime: number;
@@ -32,6 +32,7 @@ export class Message implements Types.Message {
    * @memberof Message
    */
   public constructor(message: any, roomId: number, httpRequest: IHttpRequest) {
+    super(message, roomId, httpRequest);
     this.account = message.account;
     this.body = message.body;
     this.sendTime = message.send_time;
