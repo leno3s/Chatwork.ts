@@ -29,7 +29,7 @@ export class Me extends ContactedUser implements Types.Me {
    * @param {IHttpRequest} httpRequest
    * @memberof Me
    */
-  constructor(me: any, httpRequest: IHttpRequest) {
+  public constructor(me: any, httpRequest: IHttpRequest) {
     super(me, httpRequest);
     this.title = me.title;
     this.url = me.url;

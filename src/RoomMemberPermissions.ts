@@ -17,7 +17,7 @@ export class RoomMemberPermissions implements Types.RoomMemberPermissions {
    * @param {*} roomMemberPermission
    * @memberof RoomMemberPermissions
    */
-  constructor(roomMemberPermission: any) {
+  public constructor(roomMemberPermission: any) {
     this.admin = roomMemberPermission.admin;
     this.member = roomMemberPermission.member;
     this.readonly = roomMemberPermission.readonly;

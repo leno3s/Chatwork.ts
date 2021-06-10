@@ -20,7 +20,7 @@ export class RoomTask extends Task {
    * @param {IHttpRequest} httpRequest
    * @memberof RoomTask
    */
-  constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
+  public constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
     super(task, roomId, httpRequest);
     this.account = task.account;
   }
