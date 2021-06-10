@@ -112,9 +112,9 @@ describe("Clientのテスト", () => {
       "beer",
       false,
       false,
-      undefined,
-      undefined,
-      undefined
+      "linkPath",
+      [444, 555, 666],
+      [777, 888, 999]
     );
     expect(spy.mock.calls[0][0]).toBe("/rooms");
     expect(spy.mock.calls[0][1]).toStrictEqual({
@@ -124,6 +124,9 @@ describe("Clientのテスト", () => {
       icon_preset: "beer",
       link: false,
       link_need_acceptance: false,
+      link_code: "linkPath",
+      members_member_ids: "444,555,666",
+      members_readonly_ids: "777,888,999"
     });
   });
 
