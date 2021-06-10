@@ -109,6 +109,15 @@ describe("Roomのテスト", () => {
     });
   });
 
+  test("Room#getMessage()", () => {
+    const request = new HttpRequestMock();
+    const room = new Room(roomData, request);
+    const spy = jest.spyOn(request, "get");
+    const message = room.getMessage("123456789");
+    expect(spy.mock.calls[0][0]).toBe("/rooms/123/messages/123456789");
+    expect(spy.mock.calls[0][1]).toBe(null)
+  });
+
   test("Room#getMessages()", () => {
     const request = new HttpRequestMock();
     const room = new Room(roomData, request);
