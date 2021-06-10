@@ -1,6 +1,5 @@
 import * as Types from "./Types";
 import { IHttpRequest } from "./IHttpRequest";
-import { Message } from "./Message";
 import { Room } from "./Room";
 
 /**
@@ -40,17 +39,5 @@ export class MessageId implements Types.MessageId {
     const endpoint = "/rooms/" + this.roomId;
     const response = this.httpRequest.get(endpoint, null);
     return new Room(response, this.httpRequest);
-  }
-
-  /**
-   * 該当するIDのメッセージを取得
-   *
-   * @return {Message}
-   * @memberof MessageId
-   */
-  public getMessage(): Message {
-    const endpoint = "/rooms/" + this.roomId + "/messages/" + this.messageId;
-    const response = this.httpRequest.get(endpoint, null);
-    return new Message(response, this.roomId, this.httpRequest);
   }
 }
