@@ -12,7 +12,7 @@ export class HttpRequestNode implements IHttpRequest {
   BASE_URL: string = "https://api.chatwork.com/v2";
   header: { "X-ChatWorkToken": string };
 
-  constructor(token: string) {
+  public constructor(token: string) {
     this.header = { "X-ChatWorkToken": token };
   }
 

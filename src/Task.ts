@@ -24,7 +24,7 @@ export class Task implements Types.Task {
    * @param {IHttpRequest} httpRequest
    * @memberof Task
    */
-  constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
+  public constructor(task: any, roomId: number, httpRequest: IHttpRequest) {
     this.assignedByAccount = task.assigned_by_account;
     this.messageId = task.message_id;
     this.body = task.body;
