@@ -1,11 +1,14 @@
+import * as Types from "./Types";
 import { ChatType } from "./ChatType";
+import { File } from "./File";
 import { IHttpRequest } from "./IHttpRequest";
-import { RoledUser, Types } from "./index";
 import { Link } from "./Link";
 import { Message } from "./Message";
+import { RoledUser } from "./RoledUser";
 import { RoomMemberPermissions } from "./RoomMemberPermissions";
 import { RoomTask } from "./RoomTask";
 import { Task } from "./Task";
+import { FileId } from "./FileId";
 
 /**
  * チャットルームを表すクラス
@@ -300,16 +303,43 @@ export class Room implements Types.Room {
     return new Task(response, this.roomId, this.httpRequest);
   }
 
-  public getFiles(uploaderId?: number): Types.File[] {
-    throw new Error("Method not implemented.");
+  /**
+   * チャットのファイル一覧を取得
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-files
+   *
+   * @param {number} [uploaderId]
+   * @return {File[]}  {File[]}
+   * @memberof Room
+   */
+  public getFiles(uploaderId?: number): File[] {
+    const endpoint = "/rooms/" + this.roomId + "/files";
+    const payload: {
+      account_id?: number;
+    } = {};
+    if (uploaderId !== undefined) payload.account_id = uploaderId;
+    const response = this.httpRequest.get(endpoint, payload) as Array<any>;
+    return response.map((r) => new File(r));
   }
 
   public uploadFile(file: any, message?: string): Types.FileId {
     throw new Error("Method not implemented.");
   }
 
-  public getFileDetail(fileId: number, isCreateLink?: boolean): Types.File {
-    throw new Error("Method not implemented.");
+  /**
+   * ファイル情報を取得
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-files-file_id
+   *
+   * @param {number} fileId
+   * @param {boolean} [isCreateLink]
+   * @return {File}  {File}
+   * @memberof Room
+   */
+  public getFileDetail(fileId: number, isCreateLink?: boolean): File {
+    const endpoint = "/rooms/" + this.roomId + "/files/" + fileId;
+    const payload = { create_download_url: 0 };
+    if (isCreateLink) payload.create_download_url = 1;
+    const response = this.httpRequest.get(endpoint, payload) as Array<any>;
+    return new File(response);
   }
 
   /**
