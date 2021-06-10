@@ -186,7 +186,7 @@ export interface Task extends TaskId {
 export interface File extends FileId {
   fileId: number;
   account: Account;
-  message_id: string;
+  messageId: string;
   filename: string;
   fileSize: number;
   uploadTime: number;
