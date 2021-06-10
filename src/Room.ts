@@ -127,7 +127,8 @@ export class Room implements Types.Room {
    */
   public getMembers(): Types.RoledUser[] {
     const endpoint = "/rooms/" + this.roomId + "/members";
-    return this.httpRequest.get(endpoint, null);
+    const response = this.httpRequest.get(endpoint, null) as Array<any>;
+    return response.map((r) => new RoledUser(r));
   }
 
   /**
