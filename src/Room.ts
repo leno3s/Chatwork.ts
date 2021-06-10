@@ -163,11 +163,11 @@ export class Room implements Types.Room {
    * メッセージ情報を取得
    * https://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages-message_id
    *
-   * @param {number} messageId 取得するメッセージのID
+   * @param {string} messageId 取得するメッセージのID
    * @returns {Types.Message} メッセージの情報
    * @memberof Room
    */
-  public getMessage(messageId: number): Types.Message {
+  public getMessage(messageId: string): Types.Message {
     const endpoint = "/rooms/" + this.roomId + "/messages/" + messageId;
     const response = this.httpRequest.get(endpoint, null);
     return new Message(response, this.roomId, this.httpRequest);

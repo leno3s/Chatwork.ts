@@ -127,7 +127,7 @@ export interface Room extends RoomId, ReadInformation {
     memberIds?: Array<number>,
     readonlyIds?: Array<number>
   ): RoomMemberPermissions;
-  getMessage(messageId: number): Message;
+  getMessage(messageId: string): Message;
   getMessages(force: 0 | 1): Array<Message>;
   sendMessage(message: string, isSelfUnread?: 0 | 1): MessageId;
   read(): ReadInformation;
