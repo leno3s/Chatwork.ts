@@ -18,9 +18,24 @@ export class HttpRequestNode implements IHttpRequest {
 
   private fetch(method: request.HttpVerb, path: string, options?: Object) {
     const url = this.BASE_URL + path;
-    const opt = options || {};
-    //@ts-expect-error
-    opt.headers = this.header;
+    const opt = {
+      headers: this.header,
+    };
+
+    if (options !== undefined) {
+      const form = new request.FormData();
+      Object.keys(options).forEach((key) => {
+        console.log(key);
+        //@ts-expect-error
+        form.append(key, options[key]);
+      });
+      //@ts-expect-error
+      opt.form = form;
+    }
+    console.log(opt);
+      //@ts-expect-error
+    console.log(opt.form);
+
     const response = request.default(method, url, opt);
     if (response.statusCode === 204) {
       return [];
