@@ -26,14 +26,20 @@ export class HttpRequestNode implements IHttpRequest {
       const form = new request.FormData();
       Object.keys(options).forEach((key) => {
         console.log(key);
-        //@ts-expect-error
-        form.append(key, options[key]);
+        if (key === "filename") return;
+        if (key === "file") {
+          //@ts-expect-error
+          form.append("file", options[key], options.filename);
+        } else {
+          //@ts-expect-error
+          form.append(key, options[key]);
+        }
       });
       //@ts-expect-error
       opt.form = form;
     }
     console.log(opt);
-      //@ts-expect-error
+    //@ts-expect-error
     console.log(opt.form);
 
     const response = request.default(method, url, opt);

@@ -321,8 +321,34 @@ export class Room implements Types.Room {
     return response.map((r) => new File(r));
   }
 
-  public uploadFile(file: any, message?: string): Types.FileId {
-    throw new Error("Method not implemented.");
+  /**
+   * チャットに新しいファイルをアップロード
+   * https://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-files
+   *
+   * @param {{ blob: string; filename: string }} file
+   * @param {string} [message]
+   * @return {*}  {Types.FileId}
+   * @memberof Room
+   */
+  public uploadFile(
+    blob: string,
+    filename: string,
+    message?: string
+  ): Types.FileId {
+    const endpoint = "/rooms/" + this.roomId + "/files";
+    const payload: {
+      file: string;
+      filename: string;
+      message?: string;
+    } = {
+      file: blob,
+      filename: filename,
+    };
+    if (message !== undefined) {
+      payload.message = message;
+    }
+    const response = this.httpRequest.post(endpoint, payload);
+    return new FileId(response);
   }
 
   /**
